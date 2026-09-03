@@ -84,10 +84,14 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({ activeStep: prop
               <button
                 key={step.id}
                 ref={isActive ? activeTabRef : null}
+                type="button"
                 role="tab"
                 aria-selected={isActive}
                 aria-current={isActive ? 'step' : undefined}
-                onClick={() => onSelectStep(step.id)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSelectStep(step.id);
+                }}
                 className={`flex-none md:w-full flex items-center space-x-2 px-3 py-2 md:p-3 border transition-all text-left shrink-0 ${
                   isVision
                     ? `rounded-[8px] ${isActive ? 'bg-[#ffffff] text-[#000000] border-[#000000] border-2' : 'bg-[#000000] text-[#ffffff] border-[#ffffff]'}`
