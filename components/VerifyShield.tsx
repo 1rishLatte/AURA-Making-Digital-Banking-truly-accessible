@@ -51,14 +51,10 @@ export function PlainLanguageChallenge({ onPass, onFail }: { onPass: () => void;
 }
 
 export function AudioCleanCaptcha({ text = "Verification code 4 8 2", onPass }: { text?: string; onPass?: () => void }) {
-  const [rate, setRate] = useState(1);
+  const [rate, setRate] = useState(0.85);
   const speak = () => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = rate;
-    u.lang = "en-IN";
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(u);
+    // Use clear voice helper — slower, warm pitch, INR-aware, best en-IN voice
+    import("@/lib/voice").then(({ speakClear }) => speakClear(text, { rate }));
   };
   return (
     <div className="rounded-[8px] bg-white border border-silver-veil/30 p-6">
