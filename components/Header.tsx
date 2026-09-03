@@ -7,7 +7,7 @@ export function Header() {
   const { simpleMode, setSimpleMode, dyslexiaMode, setDyslexiaMode, profile, setProfile } = useAdaptive();
   const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-40 flex flex-wrap items-center justify-between gap-y-2 px-4 md:px-10 py-3 md:py-0 md:h-16 min-h-[56px] border-b border-white/10 bg-vault-ink/95 backdrop-blur">
+    <header className="fixed top-0 inset-x-0 z-50 flex flex-wrap items-center justify-between gap-y-2 px-4 md:px-10 py-3 md:py-0 md:h-16 min-h-[56px] border-b border-white/10 bg-vault-ink/95 backdrop-blur supports-[backdrop-filter]:bg-vault-ink/80">
       <div className="flex items-center gap-3 md:gap-8 shrink-0">
         <span className="text-white text-[18px] tracking-[-0.02em] whitespace-nowrap" style={{ fontFamily: "var(--font-manrope), system-ui" }}>AURA</span>
         <span className="hidden md:inline text-[12px] tracking-[0.08em] uppercase text-silver-veil whitespace-nowrap" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>Adaptive Banking</span>

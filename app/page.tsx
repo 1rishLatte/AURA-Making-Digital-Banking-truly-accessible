@@ -8,7 +8,7 @@ import { FeatureCard } from "@/components/ui/FeatureCard";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-[100dvh] overflow-x-hidden max-w-[100vw]">
+    <div className="flex flex-col min-h-[100dvh] overflow-x-hidden max-w-[100vw] pt-[56px] md:pt-16">
       <Header />
       <main id="main-content" className="flex-1 overflow-x-hidden max-w-[100vw]">
         {/* Hero vault */}
