@@ -50,3 +50,5 @@ Apply: `npx supabase db push --linked` (requires `NEXT_PUBLIC_SUPABASE_URL`).
 
 ---
 © 2026 AURA • Crafted for India • Tag `v1-demo` is the judged artifact.
+
+<!-- auto-deploy test 2026-09-03T16:52:22.6697064+05:30 -->
