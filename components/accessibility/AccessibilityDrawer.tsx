@@ -2,9 +2,12 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAccessibility, AccessibilityProfile } from '@/lib/adaptive-context';
 
 export const AccessibilityDrawer: React.FC = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   const {
     isDrawerOpen,
     setIsDrawerOpen,
@@ -25,6 +28,9 @@ export const AccessibilityDrawer: React.FC = () => {
     setReducedMotion,
     buttonLayout,
     setButtonLayout,
+    theme,
+    setTheme,
+    resolvedTheme,
     resetAll,
   } = useAccessibility();
 
@@ -194,6 +200,30 @@ export const AccessibilityDrawer: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Theme — Light / Dark / System (default) */}
+                <div className="space-y-2">
+                  <p className="text-[11px] font-mono uppercase text-[#aeaeae]">Theme — System default</p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: 'light', label: 'Light ☀️' },
+                      { id: 'dark', label: 'Dark 🌙' },
+                      { id: 'system', label: 'Auto' },
+                    ].map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => setTheme(item.id as typeof theme)}
+                        className={`p-2.5 rounded-[8px] border text-[12px] font-medium transition-all ${
+                          theme === item.id ? 'bg-[#141414] border-[#53adfe] text-[#ffffff]' : 'bg-[#0f111a] border-[#2a2a2a] text-[#aeaeae]'
+                        }`}
+                        aria-pressed={theme === item.id}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-[11px] font-mono text-[#aeaeae]">Auto follows system. Current: {resolvedTheme}</p>
+                </div>
+
                 {/* Motion & Button Layout Toggles — Image 2 style: green ON with ON text, outline OFF */}
                 <div className="flex items-center justify-between p-3 bg-[#141414] border border-[#2a2a2a] rounded-[8px]">
                   <div>
@@ -272,7 +302,25 @@ export const AccessibilityDrawer: React.FC = () => {
                   {trustedContact?.verified ? (
                     <span className="inline-flex items-center rounded-full bg-[#1c53bd]/20 border border-[#53adfe]/30 text-[#53adfe] text-[11px] font-mono uppercase tracking-[0.08em] px-2.5 py-1">Active</span>
                   ) : (
-                    <button onClick={() => { setIsDrawerOpen(false); document.getElementById('trusted-contact-manager')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[#53adfe] hover:text-[#ffffff] text-[12px] font-mono underline">Add Phone Number</button>
+                    <button
+                      onClick={() => {
+                        setIsDrawerOpen(false);
+                        const go = () => {
+                          const el = document.getElementById('trusted-contact-manager');
+                          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          else document.getElementById('tc-phone')?.focus();
+                        };
+                        if (pathname !== '/account') {
+                          router.push('/account#trusted-contact-manager');
+                          setTimeout(go, 400);
+                        } else {
+                          setTimeout(go, 250);
+                        }
+                      }}
+                      className="text-[#53adfe] hover:text-[#ffffff] text-[12px] font-mono underline"
+                    >
+                      Add Phone Number
+                    </button>
                   )}
                 </div>
               </div>

@@ -4,14 +4,30 @@ import React, { useState, useEffect } from 'react';
 import { useAccessibility } from '@/lib/adaptive-context';
 
 function formatPhone(value: string): string {
-  const digits = value.replace(/\D/g, '').slice(0, 10);
-  if (digits.length <= 3) return digits ? `(${digits}` : '';
-  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
-  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  // Indian mobile: 10 digits, 6-9 start, formatted as 5+5. Accepts +91 prefix.
+  let digits = value.replace(/\D/g, '');
+  // Strip leading 91 or 0 country/prefix if length >10
+  if (digits.length > 10 && digits.startsWith('91')) digits = digits.slice(-10);
+  else if (digits.length > 10 && digits.startsWith('0')) digits = digits.slice(-10);
+  else if (digits.length > 10) digits = digits.slice(-10);
+  digits = digits.slice(0, 10);
+  if (digits.length <= 5) return digits;
+  return `${digits.slice(0, 5)} ${digits.slice(5)}`;
 }
 
 function isValidPhone(value: string): boolean {
-  return value.replace(/\D/g, '').length === 10;
+  let digits = value.replace(/\D/g, '');
+  if (digits.length > 10 && digits.startsWith('91')) digits = digits.slice(-10);
+  else if (digits.length > 10 && digits.startsWith('0')) digits = digits.slice(-10);
+  else if (digits.length > 10) digits = digits.slice(-10);
+  return digits.length === 10 && /^[6-9]\d{9}$/.test(digits);
+}
+
+function toE164Phone(value: string): string {
+  let digits = value.replace(/\D/g, '');
+  if (digits.length > 10 && digits.startsWith('91')) digits = digits.slice(-10);
+  else if (digits.length > 10) digits = digits.slice(-10);
+  return `+91 ${digits.slice(0, 5)} ${digits.slice(5, 10)}`;
 }
 
 export const TrustedContactManager: React.FC = () => {
@@ -40,11 +56,11 @@ export const TrustedContactManager: React.FC = () => {
   const handleSave = () => {
     const newErrors: typeof errors = {};
     if (!fullName.trim()) newErrors.name = 'Full name is required.';
-    if (!isValidPhone(phone)) newErrors.phone = 'Enter a valid 10-digit phone number.';
+    if (!isValidPhone(phone)) newErrors.phone = 'Enter valid 10-digit Indian mobile (starts 6-9).';
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    const formatted = formatPhone(phone);
+    const formatted = toE164Phone(phone);
     setTrustedContact({
       fullName: fullName.trim(),
       phone: formatted,
@@ -123,10 +139,12 @@ export const TrustedContactManager: React.FC = () => {
             id="tc-phone"
             value={phone}
             onChange={(e) => setPhone(formatPhone(e.target.value))}
-            placeholder="(555) 123-4567"
+            placeholder="98765 43210"
             inputMode="numeric"
+            autoComplete="tel"
             className={`w-full bg-[#0f111a] border ${errors.phone ? 'border-red-500' : 'border-[#2a2a2a]'} rounded-[8px] px-4 text-[#ffffff] text-[14px] font-mono placeholder:text-[#aeaeae]/60 focus:outline-none focus:border-[#aeaeae] ${inputH}`}
           />
+          <p className="text-[#aeaeae] text-[11px] font-mono mt-1">India +91 — 10 digits, starts 6-9. We'll add +91 automatically.</p>
           {errors.phone && <p className="text-red-500 text-[12px] mt-1 font-mono">{errors.phone}</p>}
         </div>
 

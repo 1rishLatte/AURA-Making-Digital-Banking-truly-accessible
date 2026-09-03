@@ -6,6 +6,7 @@ export type AccessibilityProfile = 'standard' | 'motor' | 'cognitive' | 'vision'
 export type FocusIndicatorStyle = 'standard' | 'neon' | 'pulsing';
 export type UIScale = '100' | '115' | '130';
 export type ButtonLayout = 'default' | 'stacked';
+export type Theme = 'light' | 'dark' | 'system';
 
 export interface TrustedContact {
   fullName: string;
@@ -36,6 +37,9 @@ interface AccessibilityContextType {
   setReducedMotion: (v: boolean) => void;
   buttonLayout: ButtonLayout;
   setButtonLayout: (v: ButtonLayout) => void;
+  theme: Theme;
+  setTheme: (t: Theme) => void;
+  resolvedTheme: 'light' | 'dark';
   resetAll: () => void;
   // Legacy aliases for existing components (keep build green)
   profile: AccessibilityProfile;
@@ -62,6 +66,29 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
   const [uiScale, setUiScale] = useState<UIScale>('100');
   const [reducedMotion, setReducedMotion] = useState(false);
   const [buttonLayout, setButtonLayout] = useState<ButtonLayout>('default');
+  const [theme, setTheme] = useState<Theme>('system');
+  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
+
+  // Theme: system default — resolve via matchMedia, persist to data-theme
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const resolve = (t: Theme): 'light' | 'dark' => (t === 'system' ? (media.matches ? 'dark' : 'light') : t);
+    setResolvedTheme(resolve(theme));
+    const handler = () => {
+      if (theme === 'system') setResolvedTheme(media.matches ? 'dark' : 'light');
+    };
+    media.addEventListener('change', handler);
+    return () => media.removeEventListener('change', handler);
+  }, [theme]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute('data-theme', resolvedTheme);
+    root.style.colorScheme = resolvedTheme;
+    try {
+      localStorage.setItem('aura:theme', theme);
+    } catch {}
+  }, [resolvedTheme, theme]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -115,10 +142,12 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       const s = localStorage.getItem('aura:simpleMode');
       const d = localStorage.getItem('aura:dyslexia');
       const tc = localStorage.getItem('aura:trustedContact');
+      const th = localStorage.getItem('aura:theme') as Theme | null;
       if (p) setActiveProfile(p);
       if (s) setSimpleViewEnabled(s === 'true');
       if (d) setDyslexiaFontEnabled(d === 'true');
       if (tc) setTrustedContact(JSON.parse(tc));
+      if (th && ['light', 'dark', 'system'].includes(th)) setTheme(th);
       const saved = localStorage.getItem('aura_ui_config_v1');
       if (saved) {
         const parsed = JSON.parse(saved);
@@ -141,9 +170,11 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     setUiScale('100');
     setReducedMotion(false);
     setButtonLayout('default');
+    setTheme('system');
     try {
       localStorage.removeItem('aura:trustedContact');
       localStorage.removeItem('aura_ui_config_v1');
+      localStorage.setItem('aura:theme', 'system');
     } catch {}
   }, []);
 
@@ -185,6 +216,9 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     setReducedMotion,
     buttonLayout,
     setButtonLayout,
+    theme,
+    setTheme,
+    resolvedTheme,
     resetAll,
     // aliases
     profile: activeProfile,
@@ -202,7 +236,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       else if (f.cognitive) setActiveProfile('cognitive');
     },
     vars: legacyVars,
-  }), [activeProfile, dyslexiaFontEnabled, simpleViewEnabled, tremorFilterEnabled, isDrawerOpen, trustedContact, focusStyle, uiScale, reducedMotion, buttonLayout, impairments, legacyVars, resetAll]);
+  }), [activeProfile, dyslexiaFontEnabled, simpleViewEnabled, tremorFilterEnabled, isDrawerOpen, trustedContact, focusStyle, uiScale, reducedMotion, buttonLayout, theme, resolvedTheme, impairments, legacyVars, resetAll]);
 
   return (
     <AccessibilityContext.Provider value={value}>

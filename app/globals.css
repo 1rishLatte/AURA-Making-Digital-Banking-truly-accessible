@@ -218,6 +218,57 @@ html.theme-vision-aaa button.w-\[64px\].h-\[32px\] {
   border-radius: 9999px !important;
 }
 
+/* Dark Theme — system default via data-theme="dark" (overrides light, vision still wins) */
+html[data-theme="dark"] { color-scheme: dark; }
+html[data-theme="dark"] body {
+  background: #0f111a !important;
+  color: #ffffff !important;
+}
+html[data-theme="dark"] .bg-white,
+html[data-theme="dark"] .bg-bone,
+html[data-theme="dark"] .bg-\[\#ffffff\] {
+  background: #141414 !important;
+  color: #ffffff !important;
+  border-color: #2a2a2a !important;
+}
+html[data-theme="dark"] .bg-ash-mist,
+html[data-theme="dark"] .bg-\[\#efefef\] {
+  background: #1a1d29 !important;
+  color: #ffffff !important;
+  border-color: #2a2a2a !important;
+}
+html[data-theme="dark"] .bg-\[\#efefef\].border-\[\#aeaeae\]\/20 {
+  background: #1e212e !important;
+  border-color: #2a2a2a !important;
+}
+html[data-theme="dark"] .text-vault-ink,
+html[data-theme="dark"] .text-\[\#0f111a\],
+html[data-theme="dark"] .text-\[\#141414\] {
+  color: #ffffff !important;
+}
+html[data-theme="dark"] .text-charcoal,
+html[data-theme="dark"] .text-\[\#2a2a2a\] {
+  color: #d6d6d6 !important;
+}
+html[data-theme="dark"] .text-\[\#666666\] {
+  color: #c2c2c2 !important;
+}
+html[data-theme="dark"] .border-silver-veil,
+html[data-theme="dark"] .border-\[\#2a2a2a\],
+html[data-theme="dark"] .border-\[\#aeaeae\]\/20 {
+  border-color: #2a2a2a !important;
+}
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea {
+  background: #0f111a !important;
+  color: #ffffff !important;
+  border-color: #2a2a2a !important;
+}
+html[data-theme="dark"] input::placeholder {
+  color: #aeaeae !important;
+}
+
 /* Vision: WCAG AAA high-contrast monochrome — FIXED: dark-card gray text was black-on-black + nav + drawer */
 html.theme-vision-aaa,
 html.theme-vision-aaa body {

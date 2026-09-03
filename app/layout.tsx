@@ -28,6 +28,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en-IN" className={`${inter.variable} ${manrope.variable} ${jetbrains.variable} ${spaceMono.variable} ${atkinson.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#0f111a" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('aura:theme')||'system';var m=window.matchMedia('(prefers-color-scheme: dark)').matches;var r=t==='system'?(m?'dark':'light'):t;document.documentElement.setAttribute('data-theme',r);document.documentElement.style.colorScheme=r;}catch(e){}})();`,
+          }}
+        />
       </head>
       <body className="min-h-[100dvh] flex flex-col bg-bone text-vault-ink overflow-x-hidden max-w-[100vw]">
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-vault-ink focus:text-white focus:rounded-[8px]">Skip to main content</a>

@@ -6,7 +6,7 @@ import { useAccessibility } from '@/lib/adaptive-context';
 import { useAuth } from '@/context/AuthContext';
 
 export const Header: React.FC = () => {
-  const { setIsDrawerOpen, activeProfile } = useAccessibility();
+  const { setIsDrawerOpen, activeProfile, theme, setTheme, resolvedTheme } = useAccessibility();
   const { logout } = useAuth();
 
   return (
@@ -36,6 +36,16 @@ export const Header: React.FC = () => {
         <Link className="bg-transparent border border-[#2a2a2a] hover:border-[#ffffff] text-[#ffffff] text-[12px] md:text-[14px] px-2 md:px-3 py-1 md:py-1.5 rounded-[8px] transition-colors font-normal whitespace-nowrap" href="/account">
           Dashboard
         </Link>
+
+        {/* Theme Toggle — system default */}
+        <button
+          onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+          className="flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-[8px] border border-[#2a2a2a] hover:border-[#aeaeae] text-[#ffffff] transition-colors"
+          aria-label={`Switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'} mode (now ${theme === 'system' ? `system:${resolvedTheme}` : theme})`}
+          title={theme === 'system' ? `System (${resolvedTheme}) — click to set ${resolvedTheme === 'dark' ? 'light' : 'dark'}` : `${theme} — click to toggle`}
+        >
+          <span className="text-[14px] md:text-[16px]">{resolvedTheme === 'dark' ? '☀️' : '🌙'}</span>
+        </button>
 
         {/* Accessibility Drawer Trigger */}
         <button
