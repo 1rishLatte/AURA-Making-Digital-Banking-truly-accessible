@@ -14,26 +14,66 @@ export function VoiceInput({ onTranscript, onValueChange, value }: VoiceInputPro
   const [rate, setRate] = useState(0.85);
   const [lastTranscript, setLastTranscript] = useState<string>("");
   const recognitionRef = useRef<unknown>(null);
+  const isListeningRef = useRef(false);
 
   useEffect(() => {
     preloadVoices();
+    // Keep ref in sync for onend auto-restart
+    isListeningRef.current = listening;
+  }, [listening]);
+
+  useEffect(() => {
     const SR = (typeof window !== "undefined" && ((window as unknown as Record<string, unknown>).SpeechRecognition || (window as unknown as Record<string, unknown>).webkitSpeechRecognition)) as unknown as new () => unknown;
     if (!SR) return;
-    const rec = new SR() as unknown as { continuous: boolean; interimResults: boolean; lang: string; onstart: (() => void) | null; onend: (() => void) | null; onerror: ((e: { error: string }) => void) | null; onresult: ((e: { results: unknown[] }) => void) | null; start: () => void; stop: () => void };
-    rec.continuous = false;
+    const rec = new SR() as unknown as {
+      continuous: boolean;
+      interimResults: boolean;
+      lang: string;
+      onstart: (() => void) | null;
+      onend: (() => void) | null;
+      onerror: ((e: { error: string }) => void) | null;
+      onresult: ((e: { results: unknown[] }) => void) | null;
+      start: () => void;
+      stop: () => void;
+    };
+    rec.continuous = true;
     rec.interimResults = true;
     rec.lang = "en-IN";
     rec.onstart = () => setListening(true);
-    rec.onend = () => setListening(false);
+    rec.onend = () => {
+      setListening(false);
+      // Auto-restart if browser unexpectedly cuts connection while active (30s safety)
+      if (isListeningRef.current) {
+        try {
+          rec.start();
+          setListening(true);
+        } catch {
+          console.log('Restarting recognition session...');
+        }
+      }
+    };
     rec.onerror = (e) => setError(e.error === "not-allowed" ? "Microphone permission denied — please type instead." : "Voice error — please type.");
     rec.onresult = (e) => {
       const res = e.results as Array<{ 0: { transcript: string }; isFinal: boolean }>;
-      const text = Array.from(res).map((r) => r[0].transcript).join("");
-      if (res[0]?.isFinal) { setLastTranscript(text); onTranscript(text); }
-      else onValueChange?.(text);
+      let finalTranscript = '';
+      for (let i = 0; i < res.length; i++) {
+        if ((e as unknown as { results: { isFinal: boolean }[] }).results[i]?.isFinal) {
+          finalTranscript += res[i][0].transcript + ' ';
+        }
+      }
+      const text = finalTranscript.trim() || Array.from(res).map((r) => r[0].transcript).join("");
+      if (finalTranscript.trim()) {
+        setLastTranscript(text);
+        onTranscript(text);
+      } else if (res[0] && !(res[0] as unknown as { isFinal: boolean }).isFinal) {
+        onValueChange?.(text);
+      }
     };
     recognitionRef.current = rec as unknown;
-    return () => { try { (rec as unknown as { stop: () => void }).stop(); } catch {} };
+    return () => {
+      isListeningRef.current = false;
+      try { (rec as unknown as { stop: () => void }).stop(); } catch {}
+    };
   }, [onTranscript, onValueChange]);
 
   const toggle = () => {
@@ -42,8 +82,22 @@ export function VoiceInput({ onTranscript, onValueChange, value }: VoiceInputPro
       setError("Voice not supported in this browser — please type.");
       return;
     }
-    if (listening) rec.stop();
-    else { setError(null); try { rec.start(); } catch {} }
+    if (listening) {
+      isListeningRef.current = false;
+      rec.stop();
+    } else {
+      setError(null);
+      isListeningRef.current = true;
+      try { rec.start(); } catch {}
+      // Safety: auto-stop after 30s continuous idle
+      setTimeout(() => {
+        if (isListeningRef.current) {
+          isListeningRef.current = false;
+          try { rec.stop(); } catch {}
+          setListening(false);
+        }
+      }, 30000);
+    }
   };
 
   return (
@@ -68,24 +122,44 @@ export function VoiceInput({ onTranscript, onValueChange, value }: VoiceInputPro
         )}
       </div>
 
-      {/* Clear voice playback */}
+      {/* Clear voice playback — FIXED FLEX LAYOUT (no vertical 0 . 8 5 x stack) */}
       {(value || lastTranscript) && (
-        <div className="flex flex-wrap items-center gap-2 rounded-[8px] bg-ash-mist border border-silver-veil/30 p-3">
-          <button
-            type="button"
-            onClick={() => speakClear(value || lastTranscript, { rate })}
-            className="inline-flex items-center gap-2 rounded-full bg-vault-ink text-white px-4 py-2 text-[13px] min-h-[36px]"
-            aria-label="Hear in clear voice"
-          >
-            🔊 Hear clearly
-          </button>
-          <button type="button" onClick={stopSpeak} className="text-[12px] text-silver-veil underline">Stop</button>
-          <label className="flex items-center gap-2 text-[12px] ml-auto">
-            Speed
-            <input type="range" min={0.7} max={1.1} step={0.05} value={rate} onChange={e => setRate(Number(e.target.value))} className="w-20 accent-vault-ink" aria-label="Voice speed" />
-            <span className="tabular-nums w-8">{rate.toFixed(2)}×</span>
-          </label>
-          <span className="text-[11px] text-silver-veil w-full">Clear voice: slower rate, warm pitch, INR spoken as “thousand rupees” — easy for elderly.</span>
+        <div className="bg-[#141414] border border-[#2a2a2a] rounded-[8px] p-4 my-3 space-y-3">
+          <div className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+            <div className="flex items-center space-x-2">
+              <button
+                type="button"
+                onClick={() => speakClear(value || lastTranscript, { rate })}
+                className="h-[40px] px-4 rounded-[128px] bg-[#ffffff] text-[#0f111a] text-[13px] font-normal flex items-center space-x-2 shrink-0 hover:bg-[#efefef]"
+              >
+                <span>🔊</span>
+                <span>Hear clearly</span>
+              </button>
+              <button type="button" onClick={stopSpeak} className="h-[40px] px-3 rounded-[128px] border border-[#2a2a2a] text-[#aeaeae] text-[13px] hover:text-[#ffffff] shrink-0">
+                Stop
+              </button>
+            </div>
+            <div className="flex items-center space-x-2 shrink-0 bg-[#0f111a] border border-[#2a2a2a] px-3 py-1.5 rounded-[128px]">
+              <label htmlFor="voice-speed" className="text-[12px] text-[#aeaeae] shrink-0 font-mono">
+                Speed
+              </label>
+              <input
+                id="voice-speed"
+                type="range"
+                min={0.5}
+                max={1.5}
+                step={0.05}
+                value={rate}
+                onChange={(e) => setRate(parseFloat(e.target.value))}
+                className="w-[80px] sm:w-[100px] h-1.5 bg-[#2a2a2a] rounded-lg appearance-none cursor-pointer accent-[#53adfe]"
+                aria-label="Speech rate speed"
+              />
+              <span className="text-[12px] font-mono text-[#ffffff] whitespace-nowrap shrink-0 min-w-[42px] text-right">
+                {rate.toFixed(2)}x
+              </span>
+            </div>
+          </div>
+          <p className="text-[12px] text-[#aeaeae] leading-relaxed">Clear voice: slower rate, warm pitch, INR spoken as “thousand rupees” — easy for elderly.</p>
         </div>
       )}
 
