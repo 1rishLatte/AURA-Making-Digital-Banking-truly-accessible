@@ -3,6 +3,7 @@ import { AdaptiveDashboard } from "@/components/AdaptiveDashboard";
 import { FraudShieldDemo } from "@/components/FraudShieldDemo";
 import { NoCaptchaSection } from "@/components/NoCaptchaSection";
 import { HelpWidget } from "@/components/HelpWidget";
+import { SectionNav, SectionHeader } from "@/components/SectionNav";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 
@@ -42,24 +43,37 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Dark band - dashboard */}
+        <SectionNav />
+
+        {/* 1 — Your Account */}
         <section className="bg-vault-ink py-8 md:py-12" id="simple-mode">
+          <div className="max-w-[1280px] mx-auto px-6 md:px-10">
+            <SectionHeader number="1" title="Your Account" subtitle="Big text, big buttons — easy to read" id="simple-mode-header" />
+          </div>
           <AdaptiveDashboard />
+          <div className="max-w-[1280px] mx-auto px-6 md:px-10 pb-2 flex justify-center">
+            <a href="#fraud-demo" className="inline-flex items-center gap-2 rounded-full bg-white text-vault-ink px-6 py-3 text-[14px] font-medium min-h-[44px]">Next: Try sending →</a>
+          </div>
         </section>
 
         <FraudShieldDemo />
+        <div className="max-w-[1280px] mx-auto px-6 md:px-10 pb-6 flex justify-center bg-white">
+          <a href="#no-captcha" className="inline-flex items-center gap-2 rounded-full bg-vault-ink text-white px-6 py-3 text-[14px] font-medium min-h-[44px]">Next: No puzzles →</a>
+        </div>
 
         <NoCaptchaSection />
 
-        {/* Light band - features for 30 */}
-        <section className="bg-white py-16 px-6 md:px-10">
+        {/* 4 — How We Help */}
+        <section className="bg-white py-16 px-6 md:px-10" id="how-we-help">
           <div className="max-w-[1280px] mx-auto">
-            <Eyebrow>Works for everyone</Eyebrow>
-            <h2 className="text-[40px] md:text-[48px] leading-[1.06] tracking-[-1.44px] text-vault-ink mt-3" style={{ fontFamily: "var(--font-manrope), system-ui" }}>One design. Works for everyone.</h2>
-            <div className="grid md:grid-cols-3 gap-6 mt-10">
+            <SectionHeader number="4" title="How we help" subtitle="One simple design works for many needs" id="how-we-help-header" />
+            <div className="grid md:grid-cols-3 gap-6 mt-2">
               <FeatureCard title="Thinking and reading">For trouble reading or focusing. Big text. One clear step at a time.</FeatureCard>
               <FeatureCard title="Hands and movement">For shaky hands or hard to tap. Big buttons. No dragging. Hold to confirm.</FeatureCard>
               <FeatureCard title="Seeing and hearing">For low vision or hearing loss. Loud and clear. Works with screen readers.</FeatureCard>
+            </div>
+            <div className="mt-8 flex justify-center">
+              <a href="#simple-mode" className="inline-flex items-center gap-2 rounded-full border border-silver-veil px-6 py-3 text-[14px] min-h-[44px]">Back to top ↑</a>
             </div>
           </div>
         </section>
