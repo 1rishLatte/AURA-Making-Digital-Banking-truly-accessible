@@ -1,123 +1,171 @@
-"use client";
-/* eslint-disable react-hooks/set-state-in-effect */
+'use client';
 
-import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type Profile = "standard" | "motor" | "cognitive" | "vision";
+export type AccessibilityProfile = 'standard' | 'motor' | 'cognitive' | 'vision';
 
-export interface ImpairmentFlags {
-  cognitive: boolean;
-  motor: boolean;
-  vision: boolean;
-  hearing: boolean;
-  dyslexia: boolean;
-  anxiety: boolean;
+export interface TrustedContact {
+  fullName: string;
+  phone: string;
+  relationship: 'Family Member' | 'Caregiver' | 'Legal Guardian' | 'Trusted Friend';
+  verified: boolean;
 }
 
-export interface AdaptiveVars {
-  targetMin: number;
-  fontScale: number;
-  density: string;
-  contrast: "normal" | "high";
-}
-
-interface AdaptiveState {
-  profile: Profile;
-  setProfile: (p: Profile) => void;
+interface AccessibilityContextType {
+  activeProfile: AccessibilityProfile;
+  setActiveProfile: (profile: AccessibilityProfile) => void;
+  dyslexiaFontEnabled: boolean;
+  setDyslexiaFontEnabled: (enabled: boolean) => void;
+  simpleViewEnabled: boolean;
+  setSimpleViewEnabled: (enabled: boolean) => void;
+  tremorFilterEnabled: boolean;
+  setTremorFilterEnabled: (enabled: boolean) => void;
+  isDrawerOpen: boolean;
+  setIsDrawerOpen: (open: boolean) => void;
+  trustedContact: TrustedContact | null;
+  setTrustedContact: (c: TrustedContact | null) => void;
+  resetAll: () => void;
+  // Legacy aliases for existing components (keep build green)
+  profile: AccessibilityProfile;
+  setProfile: (p: AccessibilityProfile) => void;
   simpleMode: boolean;
   setSimpleMode: (v: boolean) => void;
   dyslexiaMode: boolean;
   setDyslexiaMode: (v: boolean) => void;
-  impairments: ImpairmentFlags;
-  setImpairments: (f: ImpairmentFlags) => void;
-  vars: AdaptiveVars;
+  impairments: { cognitive: boolean; motor: boolean; vision: boolean; hearing: boolean; dyslexia: boolean; anxiety: boolean };
+  setImpairments: (f: { cognitive: boolean; motor: boolean; vision: boolean; hearing: boolean; dyslexia: boolean; anxiety: boolean }) => void;
+  vars: { targetMin: number; fontScale: number; density: string; contrast: 'normal' | 'high' };
 }
 
-const defaults: ImpairmentFlags = {
-  cognitive: false,
-  motor: false,
-  vision: false,
-  hearing: false,
-  dyslexia: false,
-  anxiety: false,
-};
+const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined);
 
-const AdaptiveContext = createContext<AdaptiveState | null>(null);
+export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [activeProfile, setActiveProfile] = useState<AccessibilityProfile>('standard');
+  const [dyslexiaFontEnabled, setDyslexiaFontEnabled] = useState(false);
+  const [simpleViewEnabled, setSimpleViewEnabled] = useState(false);
+  const [tremorFilterEnabled, setTremorFilterEnabled] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [trustedContact, setTrustedContact] = useState<TrustedContact | null>(null);
 
-function deriveVars(profile: Profile, simpleMode: boolean, flags: ImpairmentFlags): AdaptiveVars {
-  if (flags.vision || profile === "vision") return { targetMin: 72, fontScale: 1.3, density: "24px", contrast: "high" };
-  if (flags.motor || profile === "motor") return { targetMin: 68, fontScale: 1.05, density: "24px", contrast: "normal" };
-  // Simple/Cognitive — DRAMATIC pop for judges: huge targets, large type, one-step clarity
-  if (flags.cognitive || simpleMode || profile === "cognitive") return { targetMin: 72, fontScale: 1.35, density: "32px", contrast: "high" };
-  if (flags.dyslexia) return { targetMin: 48, fontScale: 1.08, density: "16px", contrast: "normal" };
-  return { targetMin: 44, fontScale: 1, density: "16px", contrast: "normal" };
-}
-
-export function AdaptiveProvider({ children }: { children: React.ReactNode }) {
-  const [profile, setProfileRaw] = useState<Profile>("standard");
-  const [simpleMode, setSimpleModeRaw] = useState(false);
-  const [dyslexiaMode, setDyslexiaModeRaw] = useState(false);
-  const [impairments, setImpairmentsRaw] = useState<ImpairmentFlags>(defaults);
-
-  // hydrate from localStorage — intentional sync on mount for a11y preferences
-  useEffect(() => {
-    const p = localStorage.getItem("aura:profile") as Profile | null;
-    const s = localStorage.getItem("aura:simpleMode");
-    const d = localStorage.getItem("aura:dyslexia");
-    const imp = localStorage.getItem("aura:impairments");
-    if (p) setProfileRaw(p);
-    if (s) setSimpleModeRaw(s === "true");
-    if (d) setDyslexiaModeRaw(d === "true");
-    if (imp) try { setImpairmentsRaw(JSON.parse(imp)); } catch {}
-  }, []);
-
-  const setProfile = useCallback((p: Profile) => {
-    setProfileRaw(p);
-    localStorage.setItem("aura:profile", p);
-  }, []);
-  const setSimpleMode = useCallback((v: boolean) => {
-    setSimpleModeRaw(v);
-    localStorage.setItem("aura:simpleMode", String(v));
-    // simpleMode maps to cognitive
-    setImpairmentsRaw(prev => {
-      const n = { ...prev, cognitive: v };
-      localStorage.setItem("aura:impairments", JSON.stringify(n));
-      return n;
-    });
-  }, []);
-  const setDyslexiaMode = useCallback((v: boolean) => {
-    setDyslexiaModeRaw(v);
-    localStorage.setItem("aura:dyslexia", String(v));
-    setImpairmentsRaw(prev => {
-      const n = { ...prev, dyslexia: v };
-      localStorage.setItem("aura:impairments", JSON.stringify(n));
-      return n;
-    });
-  }, []);
-  const setImpairments = useCallback((f: ImpairmentFlags) => {
-    setImpairmentsRaw(f);
-    localStorage.setItem("aura:impairments", JSON.stringify(f));
-    localStorage.setItem("aura:dyslexia", String(f.dyslexia));
-    localStorage.setItem("aura:simpleMode", String(f.cognitive));
-  }, []);
-
-  const vars = useMemo(() => deriveVars(profile, simpleMode, impairments), [profile, simpleMode, impairments]);
-
-  // apply CSS vars
   useEffect(() => {
     const root = document.documentElement;
-    root.style.setProperty("--aura-target", `${vars.targetMin}px`);
-    root.style.setProperty("--aura-font-scale", String(vars.fontScale));
-    root.setAttribute("data-dyslexia", dyslexiaMode ? "true" : "false");
-  }, [vars, dyslexiaMode]);
+    if (dyslexiaFontEnabled) {
+      root.classList.add('font-dyslexia');
+      root.setAttribute('data-dyslexia', 'true');
+    } else {
+      root.classList.remove('font-dyslexia');
+      root.removeAttribute('data-dyslexia');
+    }
 
-  const value = useMemo(() => ({ profile, setProfile, simpleMode, setSimpleMode, dyslexiaMode, setDyslexiaMode, impairments, setImpairments, vars }), [profile, simpleMode, dyslexiaMode, impairments, vars, setProfile, setSimpleMode, setDyslexiaMode, setImpairments]);
+    if (activeProfile === 'vision') {
+      root.classList.add('theme-vision-aaa');
+    } else {
+      root.classList.remove('theme-vision-aaa');
+    }
 
-  return <AdaptiveContext.Provider value={value}>{children}</AdaptiveContext.Provider>;
-}
+    // Apply CSS vars for backward compat (simpleMode etc. drive --aura-target)
+    const targetMin = simpleViewEnabled || activeProfile === 'cognitive' ? 72 : activeProfile === 'vision' ? 72 : activeProfile === 'motor' ? 68 : dyslexiaFontEnabled ? 48 : 44;
+    const fontScale = simpleViewEnabled || activeProfile === 'cognitive' ? 1.35 : activeProfile === 'vision' ? 1.3 : activeProfile === 'motor' ? 1.05 : dyslexiaFontEnabled ? 1.08 : 1;
+    root.style.setProperty('--aura-target', `${targetMin}px`);
+    root.style.setProperty('--aura-font-scale', String(fontScale));
 
-export function useAdaptive() {
-  const ctx = useContext(AdaptiveContext);
-  if (!ctx) throw new Error("useAdaptive must be used within AdaptiveProvider");
-  return ctx;
-}
+    // Persist
+    try {
+      localStorage.setItem('aura:profile', activeProfile);
+      localStorage.setItem('aura:simpleMode', String(simpleViewEnabled));
+      localStorage.setItem('aura:dyslexia', String(dyslexiaFontEnabled));
+      localStorage.setItem('aura:impairments', JSON.stringify({ cognitive: simpleViewEnabled, motor: activeProfile === 'motor', vision: activeProfile === 'vision', hearing: false, dyslexia: dyslexiaFontEnabled, anxiety: false }));
+      if (trustedContact) localStorage.setItem('aura:trustedContact', JSON.stringify(trustedContact));
+      else localStorage.removeItem('aura:trustedContact');
+    } catch {}
+  }, [dyslexiaFontEnabled, activeProfile, simpleViewEnabled, trustedContact]);
+
+  // Hydrate once
+  useEffect(() => {
+    try {
+      const p = localStorage.getItem('aura:profile') as AccessibilityProfile | null;
+      const s = localStorage.getItem('aura:simpleMode');
+      const d = localStorage.getItem('aura:dyslexia');
+      const tc = localStorage.getItem('aura:trustedContact');
+      if (p) setActiveProfile(p);
+      if (s) setSimpleViewEnabled(s === 'true');
+      if (d) setDyslexiaFontEnabled(d === 'true');
+      if (tc) setTrustedContact(JSON.parse(tc));
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const resetAll = () => {
+    setActiveProfile('standard');
+    setDyslexiaFontEnabled(false);
+    setSimpleViewEnabled(false);
+    setTremorFilterEnabled(false);
+    setTrustedContact(null);
+    try { localStorage.removeItem('aura:trustedContact'); } catch {}
+  };
+
+  // Legacy derived values for old consumers
+  const legacyVars = {
+    targetMin: simpleViewEnabled || activeProfile === 'cognitive' ? 72 : activeProfile === 'vision' ? 72 : activeProfile === 'motor' ? 68 : dyslexiaFontEnabled ? 48 : 44,
+    fontScale: simpleViewEnabled || activeProfile === 'cognitive' ? 1.35 : activeProfile === 'vision' ? 1.3 : activeProfile === 'motor' ? 1.05 : dyslexiaFontEnabled ? 1.08 : 1,
+    density: '16px',
+    contrast: (activeProfile === 'vision' ? 'high' : 'normal') as 'normal' | 'high',
+  };
+
+  const impairments = {
+    cognitive: simpleViewEnabled || activeProfile === 'cognitive',
+    motor: activeProfile === 'motor',
+    vision: activeProfile === 'vision',
+    hearing: false,
+    dyslexia: dyslexiaFontEnabled,
+    anxiety: false,
+  };
+
+  const value: AccessibilityContextType = {
+    activeProfile,
+    setActiveProfile,
+    dyslexiaFontEnabled,
+    setDyslexiaFontEnabled,
+    simpleViewEnabled,
+    setSimpleViewEnabled,
+    tremorFilterEnabled,
+    setTremorFilterEnabled,
+    isDrawerOpen,
+    setIsDrawerOpen,
+    trustedContact,
+    setTrustedContact,
+    resetAll,
+    // aliases
+    profile: activeProfile,
+    setProfile: setActiveProfile,
+    simpleMode: simpleViewEnabled,
+    setSimpleMode: setSimpleViewEnabled,
+    dyslexiaMode: dyslexiaFontEnabled,
+    setDyslexiaMode: setDyslexiaFontEnabled,
+    impairments,
+    setImpairments: (f) => {
+      setSimpleViewEnabled(!!f.cognitive);
+      setDyslexiaFontEnabled(!!f.dyslexia);
+      if (f.motor) setActiveProfile('motor');
+      else if (f.vision) setActiveProfile('vision');
+      else if (f.cognitive) setActiveProfile('cognitive');
+    },
+    vars: legacyVars,
+  };
+
+  return (
+    <AccessibilityContext.Provider value={value}>
+      {children}
+    </AccessibilityContext.Provider>
+  );
+};
+
+export const useAccessibility = () => {
+  const context = useContext(AccessibilityContext);
+  if (!context) throw new Error('useAccessibility must be used within AccessibilityProvider');
+  return context;
+};
+
+// Backward compat alias for older imports
+export const useAdaptive = useAccessibility;
+export const AdaptiveProvider = AccessibilityProvider;

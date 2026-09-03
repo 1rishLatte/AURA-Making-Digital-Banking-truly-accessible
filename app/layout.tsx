@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Manrope, JetBrains_Mono, Space_Mono, Atkinson_Hyperlegible } from "next/font/google";
 import "./globals.css";
-import { AdaptiveProvider } from "@/lib/adaptive-context";
+import { AccessibilityProvider } from "@/lib/adaptive-context";
+import { AccessibilityDrawer } from "@/components/accessibility/AccessibilityDrawer";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap" });
@@ -29,9 +30,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-[100dvh] flex flex-col bg-bone text-vault-ink overflow-x-hidden max-w-[100vw]">
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-vault-ink focus:text-white focus:rounded-[8px]">Skip to main content</a>
-        <AdaptiveProvider>
+        <AccessibilityProvider>
           {children}
-        </AdaptiveProvider>
+          <AccessibilityDrawer />
+        </AccessibilityProvider>
       </body>
     </html>
   );
