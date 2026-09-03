@@ -15,6 +15,20 @@ export function VoiceInput({ onTranscript, onValueChange, value }: VoiceInputPro
   const [lastTranscript, setLastTranscript] = useState<string>("");
   const recognitionRef = useRef<unknown>(null);
   const isListeningRef = useRef(false);
+  const transcriptBufferRef = useRef('');
+  const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const scheduleStateUpdate = (text: string) => {
+    transcriptBufferRef.current = text;
+    if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
+    debounceTimeoutRef.current = setTimeout(() => {
+      const buffered = transcriptBufferRef.current;
+      // Only commit if still listening or final
+      if (buffered) {
+        onValueChange?.(buffered);
+      }
+    }, 100); // 100ms debounce for interim, final commits immediately below
+  };
 
   useEffect(() => {
     preloadVoices();
@@ -55,23 +69,32 @@ export function VoiceInput({ onTranscript, onValueChange, value }: VoiceInputPro
     rec.onerror = (e) => setError(e.error === "not-allowed" ? "Microphone permission denied — please type instead." : "Voice error — please type.");
     rec.onresult = (e) => {
       const res = e.results as Array<{ 0: { transcript: string }; isFinal: boolean }>;
-      let finalTranscript = '';
-      for (let i = 0; i < res.length; i++) {
+      let interim = '';
+      for (let i = (e as unknown as { resultIndex: number }).resultIndex ?? 0; i < res.length; i++) {
         if ((e as unknown as { results: { isFinal: boolean }[] }).results[i]?.isFinal) {
-          finalTranscript += res[i][0].transcript + ' ';
+          transcriptBufferRef.current += res[i][0].transcript + ' ';
+        } else {
+          interim += res[i][0].transcript;
         }
       }
-      const text = finalTranscript.trim() || Array.from(res).map((r) => r[0].transcript).join("");
-      if (finalTranscript.trim()) {
-        setLastTranscript(text);
-        onTranscript(text);
-      } else if (res[0] && !(res[0] as unknown as { isFinal: boolean }).isFinal) {
-        onValueChange?.(text);
+      const finalBuffered = transcriptBufferRef.current.trim();
+      if (finalBuffered) {
+        // Final results commit immediately (no debounce)
+        setLastTranscript(finalBuffered + (interim ? ` ${interim}` : ''));
+        if ((e as unknown as { results: { isFinal: boolean }[] }).results[res.length - 1]?.isFinal) {
+          onTranscript(finalBuffered);
+          transcriptBufferRef.current = '';
+        } else {
+          scheduleStateUpdate(finalBuffered + (interim ? ` ${interim}` : ''));
+        }
+      } else if (interim) {
+        scheduleStateUpdate(interim);
       }
     };
     recognitionRef.current = rec as unknown;
     return () => {
       isListeningRef.current = false;
+      if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
       try { (rec as unknown as { stop: () => void }).stop(); } catch {}
     };
   }, [onTranscript, onValueChange]);

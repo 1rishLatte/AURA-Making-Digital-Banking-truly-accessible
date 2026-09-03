@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 
 export type AccessibilityProfile = 'standard' | 'motor' | 'cognitive' | 'vision';
 
@@ -95,33 +95,33 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const resetAll = () => {
+  const resetAll = useCallback(() => {
     setActiveProfile('standard');
     setDyslexiaFontEnabled(false);
     setSimpleViewEnabled(false);
     setTremorFilterEnabled(false);
     setTrustedContact(null);
     try { localStorage.removeItem('aura:trustedContact'); } catch {}
-  };
+  }, []);
 
   // Legacy derived values for old consumers
-  const legacyVars = {
+  const legacyVars = useMemo(() => ({
     targetMin: simpleViewEnabled || activeProfile === 'cognitive' ? 72 : activeProfile === 'vision' ? 72 : activeProfile === 'motor' ? 68 : dyslexiaFontEnabled ? 48 : 44,
     fontScale: simpleViewEnabled || activeProfile === 'cognitive' ? 1.35 : activeProfile === 'vision' ? 1.3 : activeProfile === 'motor' ? 1.05 : dyslexiaFontEnabled ? 1.08 : 1,
     density: '16px',
     contrast: (activeProfile === 'vision' ? 'high' : 'normal') as 'normal' | 'high',
-  };
+  }), [activeProfile, simpleViewEnabled, dyslexiaFontEnabled]);
 
-  const impairments = {
+  const impairments = useMemo(() => ({
     cognitive: simpleViewEnabled || activeProfile === 'cognitive',
     motor: activeProfile === 'motor',
     vision: activeProfile === 'vision',
     hearing: false,
     dyslexia: dyslexiaFontEnabled,
     anxiety: false,
-  };
+  }), [activeProfile, simpleViewEnabled, dyslexiaFontEnabled]);
 
-  const value: AccessibilityContextType = {
+  const value: AccessibilityContextType = useMemo(() => ({
     activeProfile,
     setActiveProfile,
     dyslexiaFontEnabled,
@@ -143,7 +143,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     dyslexiaMode: dyslexiaFontEnabled,
     setDyslexiaMode: setDyslexiaFontEnabled,
     impairments,
-    setImpairments: (f) => {
+    setImpairments: (f: { cognitive: boolean; motor: boolean; vision: boolean; hearing: boolean; dyslexia: boolean; anxiety: boolean }) => {
       setSimpleViewEnabled(!!f.cognitive);
       setDyslexiaFontEnabled(!!f.dyslexia);
       if (f.motor) setActiveProfile('motor');
@@ -151,7 +151,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       else if (f.cognitive) setActiveProfile('cognitive');
     },
     vars: legacyVars,
-  };
+  }), [activeProfile, dyslexiaFontEnabled, simpleViewEnabled, tremorFilterEnabled, isDrawerOpen, trustedContact, impairments, legacyVars, resetAll]);
 
   return (
     <AccessibilityContext.Provider value={value}>

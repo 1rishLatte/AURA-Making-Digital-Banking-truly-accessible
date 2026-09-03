@@ -1,12 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useAccessibility } from '@/lib/adaptive-context';
 import { TrustedContactManager } from '@/components/safety/TrustedContactManager';
-import { SafetyConfirmCanvas } from '@/components/SafetyConfirmCanvas';
+
+// Dynamic import for heavy GSAP canvas — no SSR
+const SafetyConfirmCanvas = dynamic(() => import('@/components/SafetyConfirmCanvas').then((m) => m.SafetyConfirmCanvas), {
+  ssr: false,
+  loading: () => <div className="w-16 h-16 mx-auto rounded-full border-2 border-[#2a2a2a] animate-pulse" />,
+});
 
 export const AdaptiveDashboard: React.FC = () => {
   const { activeProfile, simpleViewEnabled } = useAccessibility();
+  const [activeStep, setActiveStep] = useState(1);
   const [amount, setAmount] = useState('2500');
   const [recipient, setRecipient] = useState('');
   const [isNewRecipient, setIsNewRecipient] = useState(true);
@@ -15,7 +22,7 @@ export const AdaptiveDashboard: React.FC = () => {
   const [executed, setExecuted] = useState(false);
 
   return (
-    <main className="min-h-screen bg-[#0f111a] text-[#ffffff] p-6 md:p-12 space-y-12 max-w-[1280px] mx-auto">
+    <main className="min-h-screen bg-[#0f111a] text-[#ffffff] p-6 md:p-12 space-y-12 max-w-[1280px] mx-auto accelerate-gpu">
       {/* Header Section */}
       <section className="space-y-3">
         <span className="text-[#aeaeae] text-[14px] font-mono uppercase tracking-[0.018em] block">

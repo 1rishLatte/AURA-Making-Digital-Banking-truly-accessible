@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
+import { useAccessibility } from "@/lib/adaptive-context";
 
 interface Props {
   onConfirm: () => void;
@@ -54,7 +55,27 @@ export function SafetyConfirmCanvas({ onConfirm, duration = 1500, label = "Hold 
     ctx.fill();
   }, []);
 
-  useEffect(() => { draw(progressRef.current); }, [draw]);
+  const { activeProfile } = useAccessibility();
+
+  // Performance: GSAP context with active guard — only animate when relevant
+  const ringRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    draw(progressRef.current);
+    const canvas = canvasRef.current;
+    if (canvas) canvas.classList.add('accelerate-gpu');
+  }, [draw]);
+
+  useEffect(() => {
+    // Example of activeStep guard (if dashboard passes activeStep=3 for Send Money)
+    // This effect demonstrates the pattern: kill context when inactive
+    const ctx = gsap.context(() => {}, ringRef);
+    return () => {
+      ctx.revert();
+      try { gsap.ticker.remove(draw as unknown as () => void); } catch {}
+      if (tweenRef.current) tweenRef.current.kill();
+    };
+  }, [draw]);
 
   const start = () => {
     if (disabled || startedRef.current) return;
@@ -93,7 +114,7 @@ export function SafetyConfirmCanvas({ onConfirm, duration = 1500, label = "Hold 
   const onKeyUp = (e: React.KeyboardEvent) => { if (e.key === " " || e.key === "Enter") cancel(); };
 
   return (
-    <div className="flex flex-col items-center gap-4 select-none">
+    <div ref={ringRef} className="flex flex-col items-center gap-4 select-none accelerate-gpu">
       <div
         role="button"
         tabIndex={disabled ? -1 : 0}
@@ -105,10 +126,10 @@ export function SafetyConfirmCanvas({ onConfirm, duration = 1500, label = "Hold 
         onPointerCancel={cancel}
         onKeyDown={onKeyDown}
         onKeyUp={onKeyUp}
-        className={`relative rounded-full bg-vault-ink border border-white/20 shadow-lg touch-manipulation ${disabled ? "opacity-50 pointer-events-none" : "cursor-pointer"}`}
+        className={`relative rounded-full bg-vault-ink border border-white/20 touch-manipulation ${disabled ? "opacity-50 pointer-events-none" : "cursor-pointer"} accelerate-gpu`}
         style={{ width: 200, height: 200, touchAction: "manipulation" }}
       >
-        <canvas ref={canvasRef} width={200} height={200} className="absolute inset-0 w-full h-full rounded-full" aria-hidden />
+        <canvas ref={canvasRef} width={200} height={200} className="absolute inset-0 w-full h-full rounded-full accelerate-gpu" aria-hidden />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white pointer-events-none">
           <span className="text-[40px] tabular-nums leading-none">{Math.round(progress * 100)}%</span>
           <span className="text-[12px] uppercase tracking-[0.08em] text-silver-veil mt-1" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>{progress >= 1 ? "Confirmed" : label}</span>

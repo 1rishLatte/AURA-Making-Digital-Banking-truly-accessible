@@ -1,24 +1,13 @@
 "use client";
 // Clear, natural TTS for elderly — picks best en-IN / en-GB voice, slow rate, warm pitch
+// Re-export optimized speech synthesis for compatibility
+export { getBestVoice as getBestVoiceNew, sanitizeTextForSpeech, speakClearText } from './speech-synthesis';
+import { getBestVoice as getBestVoiceNewImpl, sanitizeTextForSpeech, speakClearText } from './speech-synthesis';
 
 export function getBestVoice(): SpeechSynthesisVoice | null {
   if (typeof window === "undefined" || !window.speechSynthesis) return null;
   const voices = window.speechSynthesis.getVoices();
-  if (!voices.length) return null;
-  // Prefer natural Google/Microsoft en-IN, then en-GB, then any en
-  const pref = [
-    (v: SpeechSynthesisVoice) => v.name.includes("Google") && v.lang.startsWith("en-IN"),
-    (v: SpeechSynthesisVoice) => v.name.includes("Microsoft") && v.lang.startsWith("en-IN"),
-    (v: SpeechSynthesisVoice) => v.lang === "en-IN",
-    (v: SpeechSynthesisVoice) => v.name.includes("Google") && v.lang.startsWith("en-GB"),
-    (v: SpeechSynthesisVoice) => v.lang.startsWith("en-GB"),
-    (v: SpeechSynthesisVoice) => v.lang.startsWith("en"),
-  ];
-  for (const fn of pref) {
-    const f = voices.find(fn);
-    if (f) return f;
-  }
-  return voices[0] ?? null;
+  return getBestVoiceNewImpl(voices);
 }
 
 export function speakClear(text: string, opts?: { rate?: number; pitch?: number; volume?: number; lang?: string }) {

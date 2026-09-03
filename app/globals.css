@@ -158,3 +158,17 @@ html[data-dyslexia="true"] button {
     --color-border: oklch(55% 0.005 264);
   }
 }
+
+/* Performance: GPU acceleration + mobile blur fix */
+@media (max-width: 768px) {
+  .backdrop-blur-md,
+  .backdrop-blur-sm,
+  .backdrop-blur {
+    backdrop-filter: none !important;
+    background-color: rgba(15, 17, 26, 0.95) !important;
+  }
+}
+.accelerate-gpu {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
