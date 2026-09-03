@@ -48,7 +48,17 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({ activeStep: prop
   const onSelectStep = (id: number) => {
     if (propOnSelect) return propOnSelect(id);
     const step = DASHBOARD_STEPS.find((s) => s.id === id);
-    if (step) router.push(step.href);
+    if (!step) return;
+    console.log("StepNavigation: clicking step", id, "->", step.href, "from", pathname);
+    // Primary: Next.js router
+    router.push(step.href);
+    // Fallback: hard navigate if router doesn't change path within 200ms (e.g., blocked by overlay/validation)
+    setTimeout(() => {
+      if (window.location.pathname !== step.href) {
+        console.log("StepNavigation: router.push didn't change path, falling back to window.location", step.href);
+        window.location.href = step.href;
+      }
+    }, 200);
   };
 
   useEffect(() => {
