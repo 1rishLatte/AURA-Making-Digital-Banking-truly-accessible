@@ -8,14 +8,14 @@ import { FeatureCard } from "@/components/ui/FeatureCard";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-[100dvh]">
+    <div className="flex flex-col min-h-[100dvh] overflow-x-hidden max-w-[100vw]">
       <Header />
-      <main id="main-content" className="flex-1">
+      <main id="main-content" className="flex-1 overflow-x-hidden max-w-[100vw]">
         {/* Hero vault */}
-        <section className="relative overflow-hidden bg-vault-ink text-white min-h-[560px] flex items-center justify-center px-6 md:px-10 py-20" style={{ background: "radial-gradient(1200px 600px at 70% 20%, #1c233a 0%, #0f111a 55%, #000000 100%)" }}>
-          <div className="max-w-[1280px] w-full mx-auto flex flex-col items-center text-center gap-8">
+        <section className="relative overflow-hidden bg-vault-ink text-white min-h-[560px] flex items-center justify-center px-4 sm:px-6 md:px-10 py-20 max-w-[100vw]" style={{ background: "radial-gradient(1200px 600px at 70% 20%, #1c233a 0%, #0f111a 55%, #000000 100%)" }}>
+          <div className="max-w-[1280px] w-full mx-auto flex flex-col items-center text-center gap-8 min-w-0 px-2 sm:px-0">
             <Eyebrow className="text-frost">AURA — Adaptive Universal Banking</Eyebrow>
-            <h1 className="text-[48px] md:text-[84px] lg:text-[96px] leading-[0.90] tracking-[-0.04em] max-w-[900px]" style={{ fontFamily: "var(--font-manrope), system-ui" }}>
+            <h1 className="text-[32px] xs:text-[36px] sm:text-[48px] md:text-[84px] lg:text-[96px] leading-[0.90] tracking-[-0.04em] max-w-[900px] break-words text-balance" style={{ fontFamily: "var(--font-manrope), system-ui" }}>
               Banking that adapts to <span className="text-frost">you</span>.
             </h1>
             <p className="max-w-[640px] text-[16px] md:text-[22px] leading-[1.2] tracking-[-0.44px] text-silver-veil">

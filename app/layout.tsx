@@ -14,13 +14,20 @@ export const metadata: Metadata = {
   description: "Adaptive Universal Banking & Proactive Fraud Shield — vault at dusk, WCAG 2.2 AA, INR en-IN",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-IN" className={`${inter.variable} ${manrope.variable} ${jetbrains.variable} ${spaceMono.variable} ${atkinson.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#0f111a" />
       </head>
-      <body className="min-h-[100dvh] flex flex-col bg-bone text-vault-ink">
+      <body className="min-h-[100dvh] flex flex-col bg-bone text-vault-ink overflow-x-hidden max-w-[100vw]">
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-vault-ink focus:text-white focus:rounded-[8px]">Skip to main content</a>
         <AdaptiveProvider>
           {children}
