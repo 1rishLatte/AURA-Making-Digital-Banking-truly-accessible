@@ -53,18 +53,24 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({ activeStep: prop
 
   useEffect(() => {
     if (!activeTabRef.current) return;
-    // Respect reduced motion + avoid jitter on heavy page 4 (NoCaptchaSection)
+    // Fix page 4 stuck: don't auto-scroll on mount if user is trying to click — only ensure visible without smooth jitter
+    // Use 'auto' (instant) and only if not already in view
+    const el = activeTabRef.current;
+    const parent = el.parentElement;
+    if (!parent) return;
     const prefersReduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const shouldSmooth = !prefersReduced && activeProfile !== 'vision' && !document.documentElement.getAttribute('data-reduced-motion')?.includes('true');
+    // If reduced motion or vision, skip smooth; use auto to avoid stealing pointer position
+    const behavior: ScrollBehavior = prefersReduced || activeProfile === 'vision' ? 'auto' : 'auto';
     try {
-      activeTabRef.current.scrollIntoView({
-        behavior: shouldSmooth ? 'smooth' : 'instant' as ScrollBehavior,
-        block: 'nearest',
-        inline: 'center',
-      });
+      // Only scroll if not fully visible
+      const parentRect = parent.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+      const isVisible = elRect.left >= parentRect.left && elRect.right <= parentRect.right;
+      if (!isVisible) {
+        el.scrollIntoView({ behavior, block: 'nearest', inline: 'center' });
+      }
     } catch {
-      // Fallback for browsers without 'instant'
-      activeTabRef.current.scrollIntoView();
+      el.scrollIntoView();
     }
   }, [activeStep, activeProfile]);
 
