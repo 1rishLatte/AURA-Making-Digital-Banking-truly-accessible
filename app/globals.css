@@ -1,26 +1,138 @@
 @import "tailwindcss";
 
+/* Eco — Vault at Dusk — Token System
+   Hex in comments for fidelity; components consume semantic OKLCH only.
+   display: Interdisplay→Inter, Roobert→Manrope, Fragmentmono→JetBrains Mono, Aeonik→Space Mono
+   Dyslexia: Atkinson Hyperlegible via --font-dyslexia toggle
+*/
+
+@theme {
+  /* --- Surfaces & Colors (OKLCH mapped, hex origin in comment) --- */
+  --color-bone: oklch(100% 0 0); /* #ffffff */
+  --color-ash-mist: oklch(96.5% 0.001 240); /* #efefef */
+  --color-vault-ink: oklch(14% 0.012 264); /* #0f111a - Eco vault ink */
+  --color-absolute: oklch(0% 0 0); /* #000000 - footer void only */
+  --color-carbon: oklch(17% 0.008 264); /* #141414 */
+  --color-charcoal: oklch(25% 0.005 264); /* #2a2a2a */
+  --color-graphite: oklch(18% 0.005 264); /* #222222 */
+  --color-silver-veil: oklch(72% 0.005 264); /* #aeaeae */
+  --color-frost: oklch(75% 0.04 255); /* #a6b8d1 - hairline */
+  --color-cobalt-signal: oklch(45% 0.20 264); /* #1c53bd */
+  --color-electric-sky: oklch(70% 0.16 240); /* #53adfe */
+  /* semantic */
+  --color-background: var(--color-bone);
+  --color-foreground: var(--color-vault-ink);
+  --color-border: var(--color-silver-veil);
+  --color-surface: var(--color-bone);
+  --color-surface-raised: var(--color-ash-mist);
+
+  /* --- Typography --- */
+  --font-interdisplay: var(--font-inter);
+  --font-roobert: var(--font-manrope);
+  --font-fragmentmono: var(--font-jetbrains);
+  --font-aeonik: var(--font-space-mono);
+  --font-dyslexia: var(--font-atkinson);
+
+  /* Type scale (Eco) */
+  --text-caption: 14px;
+  --leading-caption: 1.5;
+  --tracking-caption: -0.14px;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --tracking-body: -0.16px;
+  --text-subheading: 22px;
+  --leading-subheading: 1.2;
+  --tracking-subheading: -0.44px;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.2;
+  --tracking-heading-sm: -0.48px;
+  --text-heading: 40px;
+  --leading-heading: 1.06;
+  --tracking-heading: -1.2px;
+  --text-heading-lg: 48px;
+  --leading-heading-lg: 1.06;
+  --tracking-heading-lg: -1.44px;
+  --text-display: 84px;
+  --leading-display: 0.95;
+  --tracking-display: -3.36px;
+
+  /* Spacing 4pt */
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-56: 56px;
+  --spacing-60: 60px;
+  --spacing-80: 80px;
+  --spacing-96: 96px;
+  --radius-cards: 8px;
+  --radius-pills: 128px;
+}
+
+/* Base */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --aura-target: 44px;
+  --aura-font-scale: 1;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scrollbar-gutter: stable;
+  scroll-padding-top: 80px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bone);
+  color: var(--color-vault-ink);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Dyslexia mode swaps body font */
+html[data-dyslexia="true"] body {
+  font-family: var(--font-atkinson), system-ui, sans-serif !important;
+  letter-spacing: 0.02em;
+  word-spacing: 0.05em;
+  line-height: 1.6;
+}
+
+html[data-dyslexia="true"] p,
+html[data-dyslexia="true"] label,
+html[data-dyslexia="true"] input,
+html[data-dyslexia="true"] button {
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+}
+
+/* Vault rhythm */
+::selection {
+  background: oklch(75% 0.04 255 / 0.25);
+}
+
+/* Focus visible ring - 3:1 contrast WCAG 2.4.11 */
+*:focus-visible {
+  outline: 2px solid var(--color-frost);
+  outline-offset: 2px;
+}
+
+/* Motion reduce */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* prefers-contrast more */
+@media (prefers-contrast: more) {
+  :root {
+    --color-border: oklch(55% 0.005 264);
+  }
 }
