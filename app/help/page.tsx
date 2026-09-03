@@ -1,15 +1,13 @@
 import { Header } from "@/components/Header";
 import { HelpWidget } from "@/components/HelpWidget";
-import { SectionNav, SectionHeader } from "@/components/SectionNav";
+import { SectionHeader } from "@/components/SectionNav";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 
 export default function HelpPage() {
   return (
-    <div className="flex flex-col min-h-[100dvh] pt-[56px] md:pt-16">
-      <Header />
-      <SectionNav />
-      <div className="bg-white flex-1 py-8 md:py-12 px-6 md:px-10">
+    <div className="flex flex-col min-h-[100dvh] pt-[220px] md:pt-[132px]">
+      <Header />      <div className="bg-white flex-1 py-8 md:py-12 px-6 md:px-10">
       <div className="max-w-[1280px] mx-auto">
         <SectionHeader number="4" title="How we help" subtitle="One simple design works for many needs" id="help-header" />
         <div className="grid md:grid-cols-3 gap-6 mt-2">

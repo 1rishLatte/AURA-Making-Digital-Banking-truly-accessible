@@ -1,12 +1,11 @@
 import { Header } from "@/components/Header";
 import { HelpWidget } from "@/components/HelpWidget";
-import { SectionNav } from "@/components/SectionNav";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-[100dvh] overflow-x-hidden max-w-[100vw] pt-[56px] md:pt-16">
+    <div className="flex flex-col min-h-[100dvh] overflow-x-hidden max-w-[100vw] pt-[220px] md:pt-[132px]">
       <Header />
       <main id="main-content" className="flex-1 overflow-x-hidden max-w-[100vw]">
         {/* Hero vault */}
@@ -39,8 +38,6 @@ export default function Home() {
             </FeatureCard>
           </div>
         </section>
-
-        <SectionNav />
 
         {/* Home — 4 pages */}
         <section className="bg-white py-12 md:py-16 px-6 md:px-10">

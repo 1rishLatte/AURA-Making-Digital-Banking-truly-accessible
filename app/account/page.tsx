@@ -1,14 +1,12 @@
 import { Header } from "@/components/Header";
 import { AdaptiveDashboard } from "@/components/AdaptiveDashboard";
-import { SectionNav, SectionHeader } from "@/components/SectionNav";
+import { SectionHeader } from "@/components/SectionNav";
 import { HelpWidget } from "@/components/HelpWidget";
 
 export default function AccountPage() {
   return (
-    <div className="flex flex-col min-h-[100dvh] pt-[56px] md:pt-16">
-      <Header />
-      <SectionNav />
-      <div className="bg-vault-ink flex-1">
+    <div className="flex flex-col min-h-[100dvh] pt-[220px] md:pt-[132px]">
+      <Header />      <div className="bg-vault-ink flex-1">
       <div className="max-w-[1280px] mx-auto px-6 md:px-10 pt-8">
         <SectionHeader number="1" title="Your Account" subtitle="Big text, big buttons — easy to read" id="account-header" />
       </div>
