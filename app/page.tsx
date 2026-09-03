@@ -34,7 +34,7 @@ export default function Home() {
         <section className="bg-ash-mist py-16 md:py-24 px-6 md:px-10">
           <div className="max-w-[1280px] mx-auto grid md:grid-cols-2 gap-6">
             <FeatureCard eyebrow="Privacy — on-device" title="We listen on-device, we send intent-only.">
-              Voice speech-to-text runs in your browser. Only <code className="px-1 py-0.5 bg-ash-mist rounded text-[13px]">{`{action:"TRANSFER", amount:50000, recipient_type:"UNKNOWN_NEW_CONTACT"}`}</code> leaves the device — raw audio never stored.
+              Voice speech-to-text runs in your browser. Only transfer details leave the device — raw audio never stored.
             </FeatureCard>
             <FeatureCard eyebrow="Smart friction" title="AURA delays; it never denies.">
               Scam panic vs real emergency: 5s plain-language pause — “This is a new account and a large transfer. Take 5 seconds to review.” — then 1.5s hold completes. Borrowed device? Trusted Contact 1-tap or priority human handoff.

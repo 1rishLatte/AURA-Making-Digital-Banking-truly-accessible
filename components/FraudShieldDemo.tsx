@@ -68,7 +68,7 @@ export function FraudShieldDemo() {
       <div className="max-w-[1280px] mx-auto">
         <p className="text-[14px] uppercase tracking-[0.08em] text-silver-veil" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>Proactive Fraud Shield — Real Supabase + Intent-only</p>
         <h2 className="text-[40px] leading-[1.06] tracking-[-1.2px] text-vault-ink mt-2" style={{ fontFamily: "var(--font-manrope), system-ui" }}>Try a transfer. We delay, never deny.</h2>
-        <p className="text-[16px] text-charcoal mt-3 max-w-[60ch]">Voice is on-device — only <code className="px-1 py-0.5 bg-ash-mist rounded text-[13px]">{`{action:"TRANSFER", amount:50000}`}</code> leaves the device. Real emergency? 5s pause → 1.5s hold → funds move.</p>
+        <p className="text-[16px] text-charcoal mt-3 max-w-[60ch]">Voice is on-device — only transfer details leave the device. Raw audio never stored. Real emergency? 5s pause → 1.5s hold → funds move.</p>
 
         <form onSubmit={handleSubmit} className="mt-8 grid md:grid-cols-[1.2fr_0.4fr_auto] gap-4 items-end bg-ash-mist p-6 rounded-[8px]">
           <div className="flex flex-col gap-2">
