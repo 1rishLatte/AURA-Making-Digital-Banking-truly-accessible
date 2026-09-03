@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { AdaptiveDashboard } from "@/components/AdaptiveDashboard";
 import { FraudShieldDemo } from "@/components/FraudShieldDemo";
+import { NoCaptchaSection } from "@/components/NoCaptchaSection";
 import { HelpWidget } from "@/components/HelpWidget";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { FeatureCard } from "@/components/ui/FeatureCard";
@@ -47,6 +48,8 @@ export default function Home() {
         </section>
 
         <FraudShieldDemo />
+
+        <NoCaptchaSection />
 
         {/* Light band - features for 30 */}
         <section className="bg-white py-16 px-6 md:px-10">
