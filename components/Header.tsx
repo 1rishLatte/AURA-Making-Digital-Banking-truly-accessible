@@ -31,9 +31,9 @@ export function Header() {
       {/* Mobile drawer */}
       {open && (
         <nav className="flex md:hidden w-full flex-col gap-2 pt-2 pb-1 border-t border-white/10 mt-1" aria-label="Primary mobile">
-          <button onClick={() => setProfile(profile === "standard" ? "motor" : profile === "motor" ? "cognitive" : profile === "cognitive" ? "vision" : "standard")} className="w-full text-left text-white/90 text-[14px] px-4 py-3 rounded-[8px] bg-white/5 min-h-[44px]">Profile: {profile} • tap to cycle</button>
-          <button aria-pressed={simpleMode} onClick={() => setSimpleMode(!simpleMode)} className={`w-full rounded-full px-4 py-3 text-[14px] border min-h-[44px] text-left ${simpleMode ? "bg-white text-vault-ink border-white" : "bg-transparent text-white border-white/30"}`}>Simple Mode: {simpleMode ? "ON" : "OFF"}</button>
-          <button aria-pressed={dyslexiaMode} onClick={() => setDyslexiaMode(!dyslexiaMode)} className={`w-full rounded-full px-4 py-3 text-[14px] border min-h-[44px] text-left ${dyslexiaMode ? "bg-white text-vault-ink border-white" : "bg-transparent text-white border-white/30"}`}>Atkinson: {dyslexiaMode ? "ON" : "OFF"}</button>
+          <button onClick={() => { setProfile(profile === "standard" ? "motor" : profile === "motor" ? "cognitive" : profile === "cognitive" ? "vision" : "standard"); setOpen(false); }} className="w-full text-left text-white/90 text-[14px] px-4 py-3 rounded-[8px] bg-white/5 min-h-[44px]">Profile: {profile} • tap to cycle</button>
+          <button aria-pressed={simpleMode} onClick={() => { setSimpleMode(!simpleMode); setOpen(false); }} className={`w-full rounded-full px-4 py-3 text-[14px] border min-h-[44px] text-left ${simpleMode ? "bg-white text-vault-ink border-white" : "bg-transparent text-white border-white/30"}`}>Simple Mode: {simpleMode ? "ON" : "OFF"}</button>
+          <button aria-pressed={dyslexiaMode} onClick={() => { setDyslexiaMode(!dyslexiaMode); setOpen(false); }} className={`w-full rounded-full px-4 py-3 text-[14px] border min-h-[44px] text-left ${dyslexiaMode ? "bg-white text-vault-ink border-white" : "bg-transparent text-white border-white/30"}`}>Atkinson: {dyslexiaMode ? "ON" : "OFF"}</button>
           <button onClick={() => { setOpen(false); document.getElementById("dashboard")?.scrollIntoView({ behavior: "smooth" }); }} className="w-full rounded-[8px] border border-white bg-transparent px-4 py-3 text-[14px] uppercase tracking-[0.018em] text-white min-h-[44px]">Open Dashboard</button>
         </nav>
       )}
