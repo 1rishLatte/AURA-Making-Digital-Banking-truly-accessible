@@ -188,6 +188,43 @@ html[data-reduced-motion="true"] *::after {
   scroll-behavior: auto !important;
 }
 
+/* Interaction Profiles — Motor: 68px+ hitboxes */
+html[data-profile="motor"] button,
+html[data-profile="motor"] input,
+html[data-profile="motor"] select,
+html[data-profile="motor"] a[role="button"] {
+  min-height: 68px !important;
+  min-width: 68px;
+}
+html[data-profile="motor"] input {
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+}
+
+/* Vision: WCAG AAA high-contrast monochrome */
+html.theme-vision-aaa,
+html.theme-vision-aaa body {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+html.theme-vision-aaa .bg-\[\#0f111a\],
+html.theme-vision-aaa .bg-\[\#141414\] {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+}
+html.theme-vision-aaa .text-\[\#aeaeae\] {
+  color: #000000 !important;
+}
+html.theme-vision-aaa .border-\[\#2a2a2a\] {
+  border-color: #000000 !important;
+}
+
+/* Cognitive: simplified density (handled via JS, but also reduce motion) */
+html[data-simple-view="true"] .space-y-12 {
+  gap: 1rem;
+}
+
 /* Legacy focus ring - fallback */
 *:focus-visible {
   outline: 2px solid var(--color-frost);

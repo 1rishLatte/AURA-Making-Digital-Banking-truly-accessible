@@ -12,8 +12,7 @@ const SafetyConfirmCanvas = dynamic(() => import('@/components/SafetyConfirmCanv
 });
 
 export const AdaptiveDashboard: React.FC = () => {
-  const { activeProfile, simpleViewEnabled } = useAccessibility();
-  const [activeStep, setActiveStep] = useState(1);
+  const { activeProfile, simpleViewEnabled, tremorFilterEnabled } = useAccessibility();
   const [amount, setAmount] = useState('2500');
   const [recipient, setRecipient] = useState('');
   const [isNewRecipient, setIsNewRecipient] = useState(true);
@@ -21,27 +20,67 @@ export const AdaptiveDashboard: React.FC = () => {
   const [checking, setChecking] = useState(false);
   const [executed, setExecuted] = useState(false);
 
+  // Tremor filter: debounce rapid clicks
+  const lastClickRef = React.useRef(0);
+  const withTremorFilter = (fn: () => void) => {
+    if (!tremorFilterEnabled) return fn();
+    const now = Date.now();
+    if (now - lastClickRef.current < 500) return;
+    lastClickRef.current = now;
+    fn();
+  };
+
+  const isSimple = simpleViewEnabled || activeProfile === 'cognitive';
+  const isMotor = activeProfile === 'motor';
+  const isVision = activeProfile === 'vision';
+
   return (
-    <main className="min-h-screen bg-[#0f111a] text-[#ffffff] p-6 md:p-12 space-y-12 max-w-[1280px] mx-auto accelerate-gpu">
+    <main className={`min-h-screen p-6 md:p-12 space-y-8 max-w-[1280px] mx-auto accelerate-gpu ${isVision ? 'bg-[#ffffff] text-[#000000]' : 'bg-[#0f111a] text-[#ffffff]'}`}>
+      {/* Active Profile Badge */}
+      {activeProfile !== 'standard' && (
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-2 rounded-full bg-[#1c53bd]/20 border border-[#53adfe]/30 text-[#53adfe] text-[12px] font-mono uppercase tracking-[0.08em] px-3 py-1">
+            ● {activeProfile.toUpperCase()} MODE ACTIVE
+          </span>
+          {isMotor && <span className="text-[#aeaeae] text-[12px] font-mono">68px targets • Magnetic snap on</span>}
+          {isSimple && <span className="text-[#aeaeae] text-[12px] font-mono">1-step cards • Reduced clutter</span>}
+          {isVision && <span className="text-[#aeaeae] text-[12px] font-mono">High-contrast 18:1 • AAA</span>}
+          {tremorFilterEnabled && <span className="text-[#aeaeae] text-[12px] font-mono">• Tremor filter on</span>}
+        </div>
+      )}
+
       {/* Header Section */}
       <section className="space-y-3">
         <span className="text-[#aeaeae] text-[14px] font-mono uppercase tracking-[0.018em] block">
           ACCOUNT OVERVIEW
         </span>
-        <h1 className="text-[48px] md:text-[84px] font-normal leading-[0.95] tracking-[-3.36px]">
+        <h1 className={`font-normal leading-[0.95] tracking-[-3.36px] ${isVision ? 'text-[#000000]' : 'text-[#ffffff]'} ${isSimple ? 'text-[36px] md:text-[56px]' : 'text-[48px] md:text-[84px]'}`}>
           $124,500.00
         </h1>
         <p className="text-[#aeaeae] text-[16px] font-normal">
-          Vault Balance · Portfolio Protected
+          Vault Balance · Portfolio Protected {isSimple && '• Simplified view'}
         </p>
       </section>
 
-      {/* Main Grid Section */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Safety Column — Trusted Contact */}
-        <div id="trusted-contact-manager" className="md:col-span-2 scroll-mt-24">
-          <TrustedContactManager />
-        </div>
+      {/* Cognitive: Simplified 1-step view */}
+      {isSimple ? (
+        <section className="space-y-6">
+          <div className="bg-[#141414] border border-[#2a2a2a] rounded-[8px] p-8 space-y-4">
+            <span className="text-[#aeaeae] text-[12px] font-mono uppercase">STEP 1 OF 1</span>
+            <h3 className="text-[20px] font-normal text-[#ffffff]">Your Balance</h3>
+            <p className="text-[32px] font-normal text-[#ffffff]">$124,500.00</p>
+            <button onClick={() => withTremorFilter(() => alert('Balance details opened'))} className={`w-full bg-[#ffffff] text-[#0f111a] rounded-[8px] font-normal hover:bg-[#efefef] ${isMotor ? 'py-5 text-[18px]' : 'py-3 text-[14px]'}`}>View Details</button>
+          </div>
+          <div id="trusted-contact-manager" className="scroll-mt-24">
+            <TrustedContactManager />
+          </div>
+        </section>
+      ) : (
+        <section className={`grid gap-8 ${isVision ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
+          {/* Safety Column — Trusted Contact */}
+          <div id="trusted-contact-manager" className="md:col-span-2 scroll-mt-24">
+            <TrustedContactManager />
+          </div>
         {/* Quick Action Card with GSAP Hold Ring Context — wired to /api/assistant/fraud-check */}
         <div className="bg-[#141414] border border-[#2a2a2a] rounded-[8px] p-8 space-y-6">
           <span className="text-[#aeaeae] text-[14px] font-mono uppercase tracking-[0.018em] block">
@@ -136,6 +175,7 @@ export const AdaptiveDashboard: React.FC = () => {
           </div>
         </div>
       </section>
+      )}
     </main>
   );
 };

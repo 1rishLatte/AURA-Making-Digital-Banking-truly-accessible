@@ -79,6 +79,11 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       root.classList.remove('theme-vision-aaa');
     }
 
+    // Profile-driven attributes for CSS targeting
+    root.setAttribute('data-profile', activeProfile);
+    root.setAttribute('data-simple-view', String(simpleViewEnabled));
+    root.setAttribute('data-tremor-filter', String(tremorFilterEnabled));
+
     // New UI reconfiguration attributes
     root.setAttribute('data-focus-style', focusStyle);
     root.setAttribute('data-ui-scale', uiScale);
@@ -132,7 +137,14 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     setSimpleViewEnabled(false);
     setTremorFilterEnabled(false);
     setTrustedContact(null);
-    try { localStorage.removeItem('aura:trustedContact'); } catch {}
+    setFocusStyle('neon');
+    setUiScale('100');
+    setReducedMotion(false);
+    setButtonLayout('default');
+    try {
+      localStorage.removeItem('aura:trustedContact');
+      localStorage.removeItem('aura_ui_config_v1');
+    } catch {}
   }, []);
 
   // Legacy derived values for old consumers
