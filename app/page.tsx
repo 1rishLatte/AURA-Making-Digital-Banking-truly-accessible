@@ -1,9 +1,6 @@
 import { Header } from "@/components/Header";
-import { AdaptiveDashboard } from "@/components/AdaptiveDashboard";
-import { FraudShieldDemo } from "@/components/FraudShieldDemo";
-import { NoCaptchaSection } from "@/components/NoCaptchaSection";
 import { HelpWidget } from "@/components/HelpWidget";
-import { SectionNav, SectionHeader } from "@/components/SectionNav";
+import { SectionNav } from "@/components/SectionNav";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 
@@ -45,35 +42,36 @@ export default function Home() {
 
         <SectionNav />
 
-        {/* 1 — Your Account */}
-        <section className="bg-vault-ink py-8 md:py-12" id="simple-mode">
-          <div className="max-w-[1280px] mx-auto px-6 md:px-10">
-            <SectionHeader number="1" title="Your Account" subtitle="Big text, big buttons — easy to read" id="simple-mode-header" />
-          </div>
-          <AdaptiveDashboard />
-          <div className="max-w-[1280px] mx-auto px-6 md:px-10 pb-2 flex justify-center">
-            <a href="#fraud-demo" className="inline-flex items-center gap-2 rounded-full bg-white text-vault-ink px-6 py-3 text-[14px] font-medium min-h-[44px]">Next: Try sending →</a>
-          </div>
-        </section>
-
-        <FraudShieldDemo />
-        <div className="max-w-[1280px] mx-auto px-6 md:px-10 pb-6 flex justify-center bg-white">
-          <a href="#no-captcha" className="inline-flex items-center gap-2 rounded-full bg-vault-ink text-white px-6 py-3 text-[14px] font-medium min-h-[44px]">Next: No puzzles →</a>
-        </div>
-
-        <NoCaptchaSection />
-
-        {/* 4 — How We Help */}
-        <section className="bg-white py-16 px-6 md:px-10" id="how-we-help">
+        {/* Home — 4 pages */}
+        <section className="bg-white py-12 md:py-16 px-6 md:px-10">
           <div className="max-w-[1280px] mx-auto">
-            <SectionHeader number="4" title="How we help" subtitle="One simple design works for many needs" id="how-we-help-header" />
-            <div className="grid md:grid-cols-3 gap-6 mt-2">
-              <FeatureCard title="Thinking and reading">For trouble reading or focusing. Big text. One clear step at a time.</FeatureCard>
-              <FeatureCard title="Hands and movement">For shaky hands or hard to tap. Big buttons. No dragging. Hold to confirm.</FeatureCard>
-              <FeatureCard title="Seeing and hearing">For low vision or hearing loss. Loud and clear. Works with screen readers.</FeatureCard>
-            </div>
-            <div className="mt-8 flex justify-center">
-              <a href="#simple-mode" className="inline-flex items-center gap-2 rounded-full border border-silver-veil px-6 py-3 text-[14px] min-h-[44px]">Back to top ↑</a>
+            <h2 className="text-[28px] md:text-[32px] leading-none tracking-[-0.5px] font-medium text-vault-ink" style={{ fontFamily: "var(--font-manrope), system-ui" }}>Choose where to go</h2>
+            <p className="text-[14px] text-silver-veil mt-2">Each page is simple. One task at a time. Big buttons.</p>
+            <div className="grid md:grid-cols-2 gap-6 mt-8">
+              <a href="/account" className="rounded-[12px] bg-vault-ink text-white p-8 flex flex-col gap-3 border-2 border-vault-ink hover:bg-carbon transition text-left">
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white text-vault-ink text-[14px] font-semibold">1</span>
+                <span className="text-[24px] font-medium" style={{ fontFamily: "var(--font-manrope), system-ui" }}>Your Account</span>
+                <span className="text-[14px] text-silver-veil">See balance. Big text. One step.</span>
+                <span className="mt-2 inline-flex items-center gap-2 text-[14px] font-medium">Go to account →</span>
+              </a>
+              <a href="/transfer" className="rounded-[12px] bg-white p-8 flex flex-col gap-3 border-2 border-silver-veil hover:border-vault-ink transition text-left">
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-vault-ink text-white text-[14px] font-semibold">2</span>
+                <span className="text-[24px] font-medium text-vault-ink" style={{ fontFamily: "var(--font-manrope), system-ui" }}>Try sending money</span>
+                <span className="text-[14px] text-charcoal">We check every transfer. You stay safe.</span>
+                <span className="mt-2 inline-flex items-center gap-2 text-[14px] font-medium text-vault-ink">Try sending →</span>
+              </a>
+              <a href="/no-puzzles" className="rounded-[12px] bg-white p-8 flex flex-col gap-3 border-2 border-silver-veil hover:border-vault-ink transition text-left">
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-vault-ink text-white text-[14px] font-semibold">3</span>
+                <span className="text-[24px] font-medium text-vault-ink" style={{ fontFamily: "var(--font-manrope), system-ui" }}>No puzzles</span>
+                <span className="text-[14px] text-charcoal">No hard reading. We check in the background.</span>
+                <span className="mt-2 inline-flex items-center gap-2 text-[14px] font-medium text-vault-ink">See how →</span>
+              </a>
+              <a href="/help" className="rounded-[12px] bg-white p-8 flex flex-col gap-3 border-2 border-silver-veil hover:border-vault-ink transition text-left">
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-vault-ink text-white text-[14px] font-semibold">4</span>
+                <span className="text-[24px] font-medium text-vault-ink" style={{ fontFamily: "var(--font-manrope), system-ui" }}>How we help</span>
+                <span className="text-[14px] text-charcoal">One simple design works for many needs.</span>
+                <span className="mt-2 inline-flex items-center gap-2 text-[14px] font-medium text-vault-ink">Learn more →</span>
+              </a>
             </div>
           </div>
         </section>

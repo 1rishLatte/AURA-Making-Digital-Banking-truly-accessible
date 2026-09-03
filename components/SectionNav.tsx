@@ -2,29 +2,17 @@
 import { useState, useEffect } from "react";
 
 const SECTIONS = [
-  { id: "simple-mode", label: "1. Your Account", short: "Account" },
-  { id: "fraud-demo", label: "2. Try Sending", short: "Try" },
-  { id: "no-captcha", label: "3. No Puzzles", short: "No Puzzles" },
-  { id: "how-we-help", label: "4. How We Help", short: "Help" },
+  { href: "/account", label: "1. Your Account", short: "Account" },
+  { href: "/transfer", label: "2. Try Sending", short: "Try" },
+  { href: "/no-puzzles", label: "3. No Puzzles", short: "No Puzzles" },
+  { href: "/help", label: "4. How We Help", short: "Help" },
 ];
 
 export function SectionNav() {
-  const [active, setActive] = useState<string>("simple-mode");
+  const [active, setActive] = useState<string>("/account");
 
   useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(e.target.id);
-        });
-      },
-      { rootMargin: "-40% 0px -50% 0px", threshold: 0 }
-    );
-    SECTIONS.forEach((s) => {
-      const el = document.getElementById(s.id);
-      if (el) obs.observe(el);
-    });
-    return () => obs.disconnect();
+    setActive(window.location.pathname);
   }, []);
 
   return (
@@ -32,11 +20,11 @@ export function SectionNav() {
       <div className="max-w-[1280px] mx-auto px-4 md:px-10 py-3 flex gap-2 overflow-x-auto scrollbar-none">
         {SECTIONS.map((s) => (
           <a
-            key={s.id}
-            href={`#${s.id}`}
-            aria-current={active === s.id ? "true" : undefined}
+            key={s.href}
+            href={s.href}
+            aria-current={active === s.href ? "true" : undefined}
             className={`whitespace-nowrap rounded-full px-4 md:px-5 py-2.5 text-[13px] md:text-[14px] font-medium border min-h-[40px] inline-flex items-center justify-center transition shrink-0 ${
-              active === s.id ? "bg-vault-ink text-white border-vault-ink shadow" : "bg-white text-vault-ink border-silver-veil hover:border-vault-ink"
+              active === s.href ? "bg-vault-ink text-white border-vault-ink shadow" : "bg-white text-vault-ink border-silver-veil hover:border-vault-ink"
             }`}
           >
             <span className="md:hidden">{s.short}</span>

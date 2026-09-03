@@ -52,11 +52,12 @@ export async function POST(req: NextRequest) {
   }
 
   const res = NextResponse.json({ ok: true });
-  // Secure session cookie — httpOnly, secure, sameSite lax (AGENTS.md)
-  // Note: secure requires https — Vercel is https, localhost http will still set but browser may warn; SameSite lax is hackathon-safe
+  // Secure session cookie — httpOnly, sameSite lax (AGENTS.md)
+  // Secure only in production (https) — localhost http needs insecure for dev
+  const isProd = process.env.NODE_ENV === "production";
   res.cookies.set("aura_session", "demo", {
     httpOnly: true,
-    secure: true,
+    secure: isProd,
     sameSite: "lax",
     path: "/",
     maxAge: 60 * 60 * 8, // 8h

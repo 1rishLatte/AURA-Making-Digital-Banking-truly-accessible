@@ -37,7 +37,8 @@ export function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     const res = NextResponse.redirect(url);
-    res.cookies.set("aura_session", "", { httpOnly: true, secure: true, sameSite: "lax", path: "/", maxAge: 0 });
+    const isProd = process.env.NODE_ENV === "production";
+    res.cookies.set("aura_session", "", { httpOnly: true, secure: isProd, sameSite: "lax", path: "/", maxAge: 0 });
     return res;
   }
 
@@ -45,5 +46,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/api/:path*"],
+  matcher: ["/((?!_next|favicon|api|login).*)"],
 };
