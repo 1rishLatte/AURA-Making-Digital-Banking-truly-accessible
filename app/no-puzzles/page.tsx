@@ -7,41 +7,22 @@ import { StepNavigation } from "@/components/dashboard/StepNavigation";
 import { HelpWidget } from "@/components/HelpWidget";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useAccessibility } from "@/lib/adaptive-context";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function NoPuzzlesPage() {
   const { setIsDrawerOpen } = useAccessibility();
-  const router = useRouter();
-  const [bypassNotice, setBypassNotice] = useState<string | null>(null);
 
   // Clear any open drawer/backdrop when leaving Page 4 (fixes overlay blocking next page)
   useEffect(() => {
     return () => {
       setIsDrawerOpen(false);
-      // Ensure no leftover backdrop blocks pointer events on next route
       document.body.style.overflow = "";
       document.body.style.pointerEvents = "";
     };
   }, [setIsDrawerOpen]);
 
-  const handleNext = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // GUIDE Step 3 Scenario C: Link with hardcoded href — verify it fires
-    console.log("Next button clicked! href=/help, pathname=", window.location.pathname);
-    // Scenario B: Check silent validation block — log if incomplete
-    const hasVerification = document.querySelector('[data-verified="true"]') || document.querySelector('[role="status"]');
-    if (!hasVerification) {
-      console.log("Blocked by validation! No verification found — showing inline warning, but allowing bypass");
-      setBypassNotice("You can continue — verification is optional. We recommend completing one check, but you may proceed.");
-      setTimeout(() => setBypassNotice(null), 4000);
-      // Fallback navigation: manually allow even if Link would be blocked by overlay/validation
-      // Do NOT return early without feedback — show warning and continue
-    } else {
-      console.log("Verification found, proceeding to /help");
-    }
-    // Ensure Link navigation works even if a parent form called preventDefault
-    // (No form here, but guard against overlay: clear drawer/backdrop before push)
-    // Link href is hardcoded "/help" as per guide — no variable
+  const handleNext = () => {
+    console.log("Next button clicked! href=/help");
   };
 
   return (
@@ -54,16 +35,12 @@ export default function NoPuzzlesPage() {
             <SectionHeader number="4" title="No puzzles" subtitle="No hard reading, no hard tapping — we check in the background" id="no-puzzles-header" />
           </div>
           <NoCaptchaSection />
-          <div className="max-w-[1280px] mx-auto px-6 md:px-10 pb-8 flex flex-col items-center gap-3">
-            {bypassNotice && (
-              <p role="status" aria-live="polite" className="w-full max-w-[560px] text-[13px] text-amber-800 bg-amber-50 border border-amber-200 rounded-[8px] px-4 py-3 text-center">
-                {bypassNotice}
-              </p>
-            )}
+          <div className="max-w-[1280px] mx-auto px-6 md:px-10 pb-24 flex flex-col items-center gap-3 relative z-10">
             <Link
               href="/help"
               onClick={handleNext}
-              className="inline-flex items-center gap-2 rounded-full bg-vault-ink text-white px-6 py-3 text-[14px] font-medium min-h-[44px] border border-transparent hover:border-white/20 focus:outline-none focus-visible:ring-[3px] focus-visible:ring-[#facc15] focus-visible:ring-offset-2"
+              prefetch
+              className="inline-flex items-center gap-2 rounded-full bg-vault-ink text-white px-6 py-3 text-[14px] font-medium min-h-[44px] border border-vault-ink hover:border-white/20 focus:outline-none focus-visible:ring-[3px] focus-visible:ring-[#facc15] focus-visible:ring-offset-2 pointer-events-auto"
             >
               Next: How we help →
             </Link>
