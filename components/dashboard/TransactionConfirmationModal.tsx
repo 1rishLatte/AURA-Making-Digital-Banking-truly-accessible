@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAccessibility } from '@/lib/adaptive-context';
 
 interface ModalProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ export const TransactionConfirmationModal: React.FC<ModalProps> = ({
   recipientId,
   amount,
 }) => {
+  const { reducedMotion } = useAccessibility();
   const [holdProgress, setHoldProgress] = useState(0); // 0 to 100%
   const [isHolding, setIsHolding] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -133,9 +135,10 @@ export const TransactionConfirmationModal: React.FC<ModalProps> = ({
         }}
       >
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          initial={reducedMotion ? false : { opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={reducedMotion ? { duration: 0 } : undefined}
           className="w-full max-w-lg bg-[#0f111a] border border-[#2a2a2a] rounded-[16px] p-6 text-[#ffffff] shadow-2xl space-y-5 accelerate-gpu"
         >
           {/* Modal Header */}

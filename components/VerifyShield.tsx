@@ -78,7 +78,7 @@ export function PushApproveCard({ onApprove, onFallback }: { onApprove: () => vo
     <div className="rounded-[8px] bg-vault-ink text-white p-8 border border-white/10">
       <p className="text-[24px] leading-[1.2] tracking-[-0.48px]" style={{ fontFamily: "var(--font-manrope), system-ui" }}>Approve login?</p>
       <p className="text-[14px] text-silver-veil mt-2">Single large-target push to your trusted phone — no puzzle. No countdown.</p>
-      <div className="mt-6 flex gap-3">
+      <div className="mt-6 flex gap-3 action-group">
         <button onClick={onApprove} className="flex-1 min-h-[68px] rounded-[8px] bg-white text-vault-ink text-[16px] font-medium">✓ Approve — I’m here</button>
         <button onClick={onFallback} className="flex-1 min-h-[68px] rounded-[8px] bg-charcoal text-white border border-white/20 text-[16px]">Try another way</button>
       </div>

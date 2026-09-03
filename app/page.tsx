@@ -24,7 +24,7 @@ export default function Home() {
             <p className="max-w-[640px] text-[16px] md:text-[22px] leading-[1.4] tracking-[-0.44px] text-silver-veil">
               Big text. Big buttons. Speak or tap. We keep your money safe.
             </p>
-            <div className="flex flex-wrap gap-3 justify-center pt-2">
+            <div className="flex flex-wrap gap-3 justify-center pt-2 action-group hero-secondary-actions">
               <a href="#dashboard" className="inline-flex items-center gap-3 rounded-[8px] bg-charcoal/60 px-4 py-3 text-[14px] text-white min-h-[44px]">See your account <span className="h-2 w-2 rounded-sm shrink-0" style={{ background: "linear-gradient(90deg, #1c53bd, #53adfe)" }} aria-hidden /></a>
               <a href="#simple-mode" className="inline-flex items-center rounded-[8px] border border-white/20 px-4 py-3 text-[14px] text-white min-h-[44px]">Make it simpler</a>
             </div>
@@ -66,7 +66,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="rounded-[8px] bg-[#efefef] p-6 border border-[#aeaeae]/20">
+              <div className="rounded-[8px] bg-[#efefef] p-6 border border-[#aeaeae]/20 hide-when-simple">
                 <span className="text-[#aeaeae] text-[12px] font-mono uppercase tracking-[0.018em] block">RECENT ACTIVITY</span>
                 <div className="mt-4 space-y-3">
                   <div className="flex justify-between text-[13px]"><span className="text-[#141414]">Asha Medical • 28 Aug</span><span className="text-[#141414] font-mono">−₹1,250</span></div>
@@ -77,10 +77,15 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Quick Actions */}
+            <div className="simple-only rounded-[8px] bg-[#0f111a] text-white p-6 border border-white/10 flex-col gap-2">
+              <span className="text-[#aeaeae] text-[12px] font-mono uppercase">SIMPLIFIED VIEW</span>
+              <p className="text-[14px]">Showing 1-step view — analytical panels hidden. Toggle off in Accessibility Options to see all.</p>
+            </div>
+
+            {/* Quick Actions — simplified view keeps only primary action */}
             <div>
               <h3 className="text-[#aeaeae] text-[12px] font-mono uppercase tracking-[0.018em] mb-3">QUICK ACTIONS</h3>
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid md:grid-cols-3 gap-4 quick-actions-grid">
                 <Link href="/transfer" className="rounded-[8px] bg-[#141414] border border-[#2a2a2a] p-6 hover:border-[#aeaeae] transition text-left">
                   <span className="w-10 h-10 rounded-full bg-[#1c53bd] text-white flex items-center justify-center text-[18px]">→</span>
                   <p className="text-[#ffffff] text-[18px] font-normal mt-3">Send Money</p>
@@ -95,8 +100,8 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Choose where to go — kept as secondary nav */}
-            <div>
+            {/* Choose where to go — kept as secondary nav — hidden in 1-step */}
+            <div className="hide-when-simple">
               <h3 className="text-[16px] font-normal text-[#0f111a] mb-3">Or choose a page</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <Link href="/account" className="rounded-[8px] bg-[#0f111a] text-white p-6 flex flex-col gap-2 border border-[#0f111a] hover:bg-[#141414] transition text-left">

@@ -200,29 +200,169 @@ html[data-profile="motor"] input {
   padding-top: 16px !important;
   padding-bottom: 16px !important;
 }
+/* Exempt toggle switches from 68px enlargement — keep pill sizes */
+html[data-profile="motor"] button.w-12.h-6,
+html.theme-vision-aaa button.w-12.h-6 {
+  min-height: 24px !important;
+  min-width: 48px !important;
+  height: 24px !important;
+  width: 48px !important;
+  border-radius: 9999px !important;
+}
+html[data-profile="motor"] button.w-\[64px\].h-\[32px\],
+html.theme-vision-aaa button.w-\[64px\].h-\[32px\] {
+  min-height: 32px !important;
+  min-width: 64px !important;
+  height: 32px !important;
+  width: 64px !important;
+  border-radius: 9999px !important;
+}
 
-/* Vision: WCAG AAA high-contrast monochrome */
+/* Vision: WCAG AAA high-contrast monochrome — FIXED: dark-card gray text was black-on-black + nav + drawer */
 html.theme-vision-aaa,
 html.theme-vision-aaa body {
   background: #ffffff !important;
   color: #000000 !important;
 }
+/* Dark surfaces -> pure black bg with white text, white border for visibility on black */
 html.theme-vision-aaa .bg-\[\#0f111a\],
-html.theme-vision-aaa .bg-\[\#141414\] {
+html.theme-vision-aaa .bg-\[\#141414\],
+html.theme-vision-aaa .bg-vault-ink,
+html.theme-vision-aaa .bg-carbon,
+html.theme-vision-aaa .bg-charcoal,
+html.theme-vision-aaa .bg-graphite,
+html.theme-vision-aaa .bg-absolute,
+html.theme-vision-aaa .bg-\[\#2a2a2a\],
+html.theme-vision-aaa .bg-\[\#222222\] {
   background: #000000 !important;
   color: #ffffff !important;
-  border-color: #000000 !important;
+  border-color: #ffffff !important;
 }
-html.theme-vision-aaa .text-\[\#aeaeae\] {
+/* Gray/muted text on LIGHT surfaces -> black for 21:1 */
+html.theme-vision-aaa .text-\[\#aeaeae\],
+html.theme-vision-aaa .text-silver-veil,
+html.theme-vision-aaa .text-\[\#a6b8d1\],
+html.theme-vision-aaa .text-frost,
+html.theme-vision-aaa .text-charcoal {
   color: #000000 !important;
 }
-html.theme-vision-aaa .border-\[\#2a2a2a\] {
+/* SAME-ELEMENT: gray on dark (button itself is both bg + text) -> white */
+html.theme-vision-aaa .bg-\[\#0f111a\].text-\[\#aeaeae\],
+html.theme-vision-aaa .bg-\[\#141414\].text-\[\#aeaeae\],
+html.theme-vision-aaa .bg-vault-ink.text-\[\#aeaeae\],
+html.theme-vision-aaa .bg-carbon.text-\[\#aeaeae\],
+html.theme-vision-aaa .bg-charcoal.text-\[\#aeaeae\],
+html.theme-vision-aaa .bg-graphite.text-\[\#aeaeae\],
+html.theme-vision-aaa .bg-absolute.text-\[\#aeaeae\],
+html.theme-vision-aaa .bg-\[\#0f111a\].text-silver-veil,
+html.theme-vision-aaa .bg-\[\#141414\].text-silver-veil,
+html.theme-vision-aaa .bg-vault-ink.text-silver-veil,
+html.theme-vision-aaa .bg-carbon.text-silver-veil,
+html.theme-vision-aaa .bg-\[\#0f111a\].text-frost,
+html.theme-vision-aaa .bg-\[\#141414\].text-frost {
+  color: #ffffff !important;
+}
+/* DESCENDANT: gray inside dark -> white */
+html.theme-vision-aaa .bg-\[\#0f111a\] .text-\[\#aeaeae\],
+html.theme-vision-aaa .bg-\[\#141414\] .text-\[\#aeaeae\],
+html.theme-vision-aaa .bg-vault-ink .text-\[\#aeaeae\],
+html.theme-vision-aaa .bg-carbon .text-\[\#aeaeae\],
+html.theme-vision-aaa .bg-charcoal .text-\[\#aeaeae\],
+html.theme-vision-aaa .bg-graphite .text-\[\#aeaeae\],
+html.theme-vision-aaa .bg-absolute .text-\[\#aeaeae\],
+html.theme-vision-aaa .bg-\[\#0f111a\] .text-silver-veil,
+html.theme-vision-aaa .bg-\[\#141414\] .text-silver-veil,
+html.theme-vision-aaa .bg-vault-ink .text-silver-veil,
+html.theme-vision-aaa .bg-carbon .text-silver-veil,
+html.theme-vision-aaa .bg-charcoal .text-silver-veil,
+html.theme-vision-aaa .bg-graphite .text-silver-veil,
+html.theme-vision-aaa .bg-absolute .text-silver-veil,
+html.theme-vision-aaa .bg-\[\#0f111a\] .text-frost,
+html.theme-vision-aaa .bg-\[\#141414\] .text-frost,
+html.theme-vision-aaa .bg-vault-ink .text-frost,
+html.theme-vision-aaa .bg-carbon .text-frost,
+html.theme-vision-aaa .bg-\[\#0f111a\] .text-\[\#a6b8d1\],
+html.theme-vision-aaa .bg-\[\#141414\] .text-\[\#a6b8d1\],
+html.theme-vision-aaa .bg-vault-ink .text-charcoal,
+html.theme-vision-aaa .bg-carbon .text-charcoal {
+  color: #ffffff !important;
+}
+/* StepNavigation: inactive button text + description inside dark nav */
+html.theme-vision-aaa nav.bg-\[\#0f111a\] .text-\[\#aeaeae\] {
+  color: #ffffff !important;
+}
+/* Nav circles: inactive = gray circle with white number -> make high-contrast */
+html.theme-vision-aaa .bg-\[\#2a2a2a\] {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #ffffff !important;
+}
+html.theme-vision-aaa span.bg-\[\#ffffff\].text-\[\#0f111a\] {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+/* Borders: light -> black, dark -> white */
+html.theme-vision-aaa .border-\[\#2a2a2a\],
+html.theme-vision-aaa .border-silver-veil\/30,
+html.theme-vision-aaa .border-white\/10,
+html.theme-vision-aaa .border-white\/20 {
   border-color: #000000 !important;
 }
+html.theme-vision-aaa .bg-\[\#0f111a\].border-\[\#2a2a2a\],
+html.theme-vision-aaa .bg-\[\#141414\].border-\[\#2a2a2a\],
+html.theme-vision-aaa .bg-vault-ink.border-\[\#2a2a2a\],
+html.theme-vision-aaa .bg-carbon.border-\[\#2a2a2a\] {
+  border-color: #ffffff !important;
+}
+/* Drawer checkboxes & toggles stay visible in vision */
+html.theme-vision-aaa input[type="checkbox"] {
+  accent-color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+/* Toggles: inactive black/white, active white/black for 21:1 */
+html.theme-vision-aaa button.bg-\[\#2a2a2a\] {
+  background: #000000 !important;
+  border: 1px solid #ffffff !important;
+}
+html.theme-vision-aaa button.bg-\[\#53adfe\] {
+  background: #ffffff !important;
+  border: 1px solid #000000 !important;
+}
+html.theme-vision-aaa button.bg-\[\#53adfe\] > div.bg-\[\#ffffff\] {
+  background: #000000 !important;
+}
+html.theme-vision-aaa button.bg-\[\#2a2a2a\] > div.bg-\[\#ffffff\] {
+  background: #ffffff !important;
+  border: 1px solid #000000 !important;
+}
+/* bg-white buttons (e.g., Approve — I'm here) stay high-contrast white/black */
+html.theme-vision-aaa .bg-white {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+html.theme-vision-aaa .bg-white .text-\[\#0f111a\],
+html.theme-vision-aaa .bg-white.text-\[\#0f111a\] {
+  color: #000000 !important;
+}
 
-/* Cognitive: simplified density (handled via JS, but also reduce motion) */
+/* Cognitive: simplified density — 1-step view hides analytical panels */
 html[data-simple-view="true"] .space-y-12 {
   gap: 1rem;
+}
+html[data-simple-view="true"] .hide-when-simple {
+  display: none !important;
+}
+html[data-simple-view="true"] .simple-only {
+  display: flex !important;
+}
+.simple-only { display: none; }
+html[data-simple-view="true"] .quick-actions-grid {
+  grid-template-columns: 1fr !important;
+}
+html[data-simple-view="true"] .hero-secondary-actions {
+  flex-direction: column;
 }
 
 /* Legacy focus ring - fallback */

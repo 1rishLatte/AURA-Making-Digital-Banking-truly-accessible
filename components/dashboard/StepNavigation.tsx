@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { useAccessibility } from '@/lib/adaptive-context';
 
 export interface StepItem {
   id: number;
@@ -31,6 +32,8 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({ activeStep: prop
   const pathname = usePathname();
   const router = useRouter();
   const activeTabRef = useRef<HTMLButtonElement | null>(null);
+  const { activeProfile } = useAccessibility();
+  const isVision = activeProfile === 'vision';
 
   const hrefToId: Record<string, number> = {
     '/': 1,
@@ -72,16 +75,37 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({ activeStep: prop
                 aria-selected={isActive}
                 aria-current={isActive ? 'step' : undefined}
                 onClick={() => onSelectStep(step.id)}
-                className={`flex-none md:w-full flex items-center space-x-2 px-3 py-2 md:p-3 rounded-[128px] md:rounded-[8px] border transition-all text-left shrink-0 ${
-                  isActive ? 'bg-[#141414] border-[#53adfe] text-[#ffffff]' : 'bg-[#0f111a] border-[#2a2a2a] text-[#aeaeae] hover:border-[#ffffff]'
+                className={`flex-none md:w-full flex items-center space-x-2 px-3 py-2 md:p-3 border transition-all text-left shrink-0 ${
+                  isVision
+                    ? `rounded-[8px] ${isActive ? 'bg-[#ffffff] text-[#000000] border-[#000000] border-2' : 'bg-[#000000] text-[#ffffff] border-[#ffffff]'}`
+                    : `rounded-[128px] md:rounded-[8px] ${isActive ? 'bg-[#141414] border-[#53adfe] text-[#ffffff]' : 'bg-[#0f111a] border-[#2a2a2a] text-[#aeaeae] hover:border-[#ffffff]'}`
                 }`}
               >
-                <span className={`w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[11px] md:text-[12px] font-mono shrink-0 ${isActive ? 'bg-[#ffffff] text-[#0f111a]' : 'bg-[#2a2a2a] text-[#ffffff]'}`}>
+                <span
+                  className={`w-5 h-5 md:w-6 md:h-6 flex items-center justify-center text-[11px] md:text-[12px] font-mono shrink-0 border-2 font-bold ${
+                    isVision
+                      ? isActive
+                        ? 'rounded-[4px] bg-[#000000] text-[#ffffff] border-[#ffffff]'
+                        : 'rounded-[4px] bg-[#ffffff] text-[#000000] border-[#000000]'
+                      : `rounded-full border-transparent ${isActive ? 'bg-[#ffffff] text-[#0f111a]' : 'bg-[#2a2a2a] text-[#ffffff]'}`
+                  }`}
+                  aria-hidden
+                >
                   {step.id}
                 </span>
                 <div className="truncate">
-                  <span className="text-[13px] md:text-[14px] font-normal block truncate">{step.title}</span>
-                  <p className="hidden md:block text-[11px] text-[#aeaeae] truncate mt-0.5">{step.description}</p>
+                  <span
+                    className={`text-[13px] md:text-[14px] font-normal block truncate ${isVision ? (isActive ? 'text-[#000000]' : 'text-[#ffffff]') : ''}`}
+                    style={isVision ? { color: isActive ? '#000000' : '#ffffff' } : undefined}
+                  >
+                    {step.title}
+                  </span>
+                  <p
+                    className={`hidden md:block text-[11px] truncate mt-0.5 ${isVision ? (isActive ? 'text-[#000000]' : 'text-[#ffffff]') : 'text-[#aeaeae]'}`}
+                    style={isVision ? { color: isActive ? '#000000' : '#ffffff', opacity: isActive ? 0.8 : 1 } : undefined}
+                  >
+                    {step.description}
+                  </p>
                 </div>
               </button>
             );

@@ -41,19 +41,20 @@ export const AccessibilityDrawer: React.FC = () => {
         <>
           {/* Backdrop */}
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={reducedMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={reducedMotion ? { duration: 0 } : undefined}
             onClick={() => setIsDrawerOpen(false)}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
           />
 
           {/* Drawer Side Panel */}
           <motion.aside
-            initial={{ x: '100%' }}
+            initial={reducedMotion ? false : { x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            transition={reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 300, damping: 30 }}
             className="fixed right-0 top-0 h-full w-full max-w-[380px] bg-[#0f111a] border-l border-[#2a2a2a] z-50 p-6 flex flex-col justify-between overflow-y-auto"
           >
             <div>
@@ -193,18 +194,38 @@ export const AccessibilityDrawer: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Motion & Button Layout Toggles */}
+                {/* Motion & Button Layout Toggles — Image 2 style: green ON with ON text, outline OFF */}
                 <div className="flex items-center justify-between p-3 bg-[#141414] border border-[#2a2a2a] rounded-[8px]">
                   <div>
                     <p className="text-[14px] text-[#ffffff]">Suppress Animations</p>
                     <p className="text-[12px] text-[#aeaeae]">Disables all motion effects</p>
                   </div>
                   <button
-                    onClick={() => setReducedMotion(!reducedMotion)}
-                    className={`w-12 h-6 rounded-full relative transition-colors ${reducedMotion ? 'bg-[#53adfe]' : 'bg-[#2a2a2a]'}`}
+                    role="switch"
+                    aria-checked={reducedMotion}
                     aria-label="Toggle suppress animations"
+                    onClick={() => setReducedMotion(!reducedMotion)}
+                    className={`relative inline-flex items-center shrink-0 rounded-full border-2 p-1 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#141414]
+                      ${activeProfile === 'vision'
+                        ? reducedMotion
+                          ? 'bg-white border-white'
+                          : 'bg-black border-white'
+                        : reducedMotion
+                        ? 'bg-[#00D492] border-[#00D492]'
+                        : 'bg-transparent border-white'}
+                      w-[64px] h-[32px]`}
                   >
-                    <div className={`w-5 h-5 rounded-full bg-[#ffffff] absolute top-0.5 transition-transform ${reducedMotion ? 'translate-x-6' : 'translate-x-0.5'}`} />
+                    {reducedMotion ? (
+                      <>
+                        <span className={`text-[11px] font-bold tracking-wide select-none ml-1 ${activeProfile === 'vision' ? 'text-black' : 'text-black'}`} aria-hidden>ON</span>
+                        <span className={`ml-auto w-[24px] h-[24px] rounded-full shadow-sm ${activeProfile === 'vision' ? 'bg-black' : 'bg-white'}`} />
+                      </>
+                    ) : (
+                      <>
+                        <span className="w-[24px] h-[24px] rounded-full bg-white shadow-sm" />
+                        <span className="text-[11px] font-bold tracking-wide text-white mr-1 select-none" aria-hidden>OFF</span>
+                      </>
+                    )}
                   </button>
                 </div>
 
@@ -214,11 +235,31 @@ export const AccessibilityDrawer: React.FC = () => {
                     <p className="text-[12px] text-[#aeaeae]">Full-width targets for foot mice</p>
                   </div>
                   <button
-                    onClick={() => setButtonLayout(buttonLayout === 'stacked' ? 'default' : 'stacked')}
-                    className={`w-12 h-6 rounded-full relative transition-colors ${buttonLayout === 'stacked' ? 'bg-[#53adfe]' : 'bg-[#2a2a2a]'}`}
+                    role="switch"
+                    aria-checked={buttonLayout === 'stacked'}
                     aria-label="Toggle stack action buttons"
+                    onClick={() => setButtonLayout(buttonLayout === 'stacked' ? 'default' : 'stacked')}
+                    className={`relative inline-flex items-center shrink-0 rounded-full border-2 p-1 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#141414]
+                      ${activeProfile === 'vision'
+                        ? buttonLayout === 'stacked'
+                          ? 'bg-white border-white'
+                          : 'bg-black border-white'
+                        : buttonLayout === 'stacked'
+                        ? 'bg-[#00D492] border-[#00D492]'
+                        : 'bg-transparent border-white'}
+                      w-[64px] h-[32px]`}
                   >
-                    <div className={`w-5 h-5 rounded-full bg-[#ffffff] absolute top-0.5 transition-transform ${buttonLayout === 'stacked' ? 'translate-x-6' : 'translate-x-0.5'}`} />
+                    {buttonLayout === 'stacked' ? (
+                      <>
+                        <span className="text-[11px] font-bold tracking-wide text-black ml-1 select-none" aria-hidden>ON</span>
+                        <span className={`ml-auto w-[24px] h-[24px] rounded-full shadow-sm ${activeProfile === 'vision' ? 'bg-black' : 'bg-white'}`} />
+                      </>
+                    ) : (
+                      <>
+                        <span className="w-[24px] h-[24px] rounded-full bg-white shadow-sm" />
+                        <span className="text-[11px] font-bold tracking-wide text-white mr-1 select-none" aria-hidden>OFF</span>
+                      </>
+                    )}
                   </button>
                 </div>
 
