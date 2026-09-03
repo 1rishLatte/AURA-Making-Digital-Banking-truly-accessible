@@ -50,11 +50,10 @@ export const Header: React.FC = () => {
         {/* Accessibility Drawer Trigger */}
         <button
           onClick={() => setIsDrawerOpen(true)}
-          className="flex items-center space-x-1 md:space-x-2 bg-transparent border border-[#2a2a2a] hover:border-[#aeaeae] text-[#ffffff] text-[12px] md:text-[14px] px-2 md:px-3 py-1 md:py-1.5 rounded-[8px] transition-colors whitespace-nowrap"
+          className="flex items-center space-x-2 bg-transparent border border-[#2a2a2a] hover:border-[#aeaeae] text-[#ffffff] text-[12px] md:text-[14px] px-3 py-1.5 rounded-[8px] transition-colors whitespace-nowrap"
           aria-label="Open Accessibility Options"
         >
-          <span className="text-[14px] md:text-[16px]">♿</span>
-          <span className="hidden md:inline text-[14px] font-normal">Accessibility</span>
+          <span className="text-[14px] font-normal">Accessibility</span>
           {activeProfile !== 'standard' && (
             <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-[#1c53bd]" />
           )}

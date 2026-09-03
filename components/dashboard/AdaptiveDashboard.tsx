@@ -69,7 +69,7 @@ export const AdaptiveDashboard: React.FC = () => {
             <span className="text-[#aeaeae] text-[12px] font-mono uppercase">STEP 1 OF 1</span>
             <h3 className="text-[20px] font-normal text-[#ffffff]">Your Balance</h3>
             <p className="text-[32px] font-normal text-[#ffffff]">₹1,24,500.00</p>
-            <button onClick={() => withTremorFilter(() => alert('Balance details opened'))} className={`w-full bg-[#ffffff] text-[#0f111a] rounded-[8px] font-normal hover:bg-[#efefef] ${isMotor ? 'py-5 text-[18px]' : 'py-3 text-[14px]'}`}>View Details</button>
+            <button onClick={() => withTremorFilter(() => alert('Balance details opened'))} className={`w-full bg-[#ffffff] text-[#0f111a] border border-[#2a2a2a] rounded-[8px] font-normal hover:bg-[#efefef] ${isMotor ? 'py-5 text-[18px]' : 'py-3 text-[14px]'}`}>View Details</button>
           </div>
           <div id="trusted-contact-manager" className="scroll-mt-24">
             <TrustedContactManager />
@@ -116,7 +116,7 @@ export const AdaptiveDashboard: React.FC = () => {
                   setChecking(false);
                 }
               }}
-              className="w-full bg-[#ffffff] text-[#0f111a] rounded-[8px] py-3 text-[14px] font-normal hover:bg-[#efefef] transition-colors"
+              className="w-full bg-[#ffffff] text-[#0f111a] border border-[#2a2a2a] rounded-[8px] py-3 text-[14px] font-normal hover:bg-[#efefef] transition-colors"
             >
               {checking ? 'Analyzing…' : 'Check transfer for scams'}
             </button>

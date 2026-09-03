@@ -397,6 +397,20 @@ html.theme-vision-aaa .bg-white .text-\[\#0f111a\],
 html.theme-vision-aaa .bg-white.text-\[\#0f111a\] {
   color: #000000 !important;
 }
+/* Vision: Fix vault balance amount visibility — black on white, not black on dark (screenshot bug) */
+html.theme-vision-aaa main {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+html.theme-vision-aaa main h1,
+html.theme-vision-aaa main h1.text-\[\#ffffff\],
+html.theme-vision-aaa main h1.text-\[\#000000\] {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+html.theme-vision-aaa main .text-\[\#aeaeae\] {
+  color: #000000 !important;
+}
 
 /* Cognitive: simplified density — 1-step view hides analytical panels */
 html[data-simple-view="true"] .space-y-12 {

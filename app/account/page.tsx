@@ -14,7 +14,7 @@ export default function AccountPage() {
         <StepNavigation />
         <div className="bg-vault-ink flex-1">
         <div className="max-w-[1280px] mx-auto px-6 md:px-10 pt-8">
-          <SectionHeader number="1" title="Your Account" subtitle="Big text, big buttons — easy to read" id="account-header" />
+          <SectionHeader number="2" title="Your Account" subtitle="Big text, big buttons — easy to read" id="account-header" />
         </div>
         <AdaptiveDashboard />
         <div className="max-w-[1280px] mx-auto px-6 md:px-10 pb-8 flex justify-center">

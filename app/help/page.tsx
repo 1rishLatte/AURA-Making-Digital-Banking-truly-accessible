@@ -15,7 +15,7 @@ export default function HelpPage() {
         <StepNavigation />
         <div className="bg-white flex-1 py-8 md:py-12 px-6 md:px-10">
       <div className="max-w-[1280px] mx-auto">
-        <SectionHeader number="4" title="How we help" subtitle="One simple design works for many needs" id="help-header" />
+        <SectionHeader number="5" title="How we help" subtitle="One simple design works for many needs" id="help-header" />
         <div className="grid md:grid-cols-3 gap-6 mt-2">
           <FeatureCard title="Thinking and reading">For trouble reading or focusing. Big text. One clear step at a time.</FeatureCard>
           <FeatureCard title="Hands and movement">For shaky hands or hard to tap. Big buttons. No dragging. Hold to confirm.</FeatureCard>

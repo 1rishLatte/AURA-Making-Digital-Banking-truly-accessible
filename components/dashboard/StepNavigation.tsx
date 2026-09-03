@@ -52,14 +52,21 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({ activeStep: prop
   };
 
   useEffect(() => {
-    if (activeTabRef.current) {
+    if (!activeTabRef.current) return;
+    // Respect reduced motion + avoid jitter on heavy page 4 (NoCaptchaSection)
+    const prefersReduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const shouldSmooth = !prefersReduced && activeProfile !== 'vision' && !document.documentElement.getAttribute('data-reduced-motion')?.includes('true');
+    try {
       activeTabRef.current.scrollIntoView({
-        behavior: 'smooth',
+        behavior: shouldSmooth ? 'smooth' : 'instant' as ScrollBehavior,
         block: 'nearest',
         inline: 'center',
       });
+    } catch {
+      // Fallback for browsers without 'instant'
+      activeTabRef.current.scrollIntoView();
     }
-  }, [activeStep]);
+  }, [activeStep, activeProfile]);
 
   return (
     <nav className="w-full bg-[#0f111a] border-b border-[#2a2a2a] sticky top-[56px] sm:top-[64px] z-30 shadow-md" aria-label="Dashboard Steps">

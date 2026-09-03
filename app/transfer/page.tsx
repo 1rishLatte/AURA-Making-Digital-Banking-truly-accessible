@@ -14,7 +14,7 @@ export default function TransferPage() {
         <StepNavigation />
         <div className="bg-white flex-1">
         <div className="max-w-[1280px] mx-auto px-6 md:px-10 pt-8">
-          <SectionHeader number="2" title="Try sending money" subtitle="We check every transfer — you stay in control" id="transfer-header" />
+          <SectionHeader number="3" title="Try sending money" subtitle="We check every transfer — you stay in control" id="transfer-header" />
         </div>
         <FraudShieldDemo />
         <div className="max-w-[1280px] mx-auto px-6 md:px-10 pb-8 flex justify-center">
