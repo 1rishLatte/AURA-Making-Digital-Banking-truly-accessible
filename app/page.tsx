@@ -1,8 +1,8 @@
 import { Header } from "@/components/Header";
 import { AdaptiveDashboard } from "@/components/AdaptiveDashboard";
+import { FraudShieldDemo } from "@/components/FraudShieldDemo";
 import { HelpWidget } from "@/components/HelpWidget";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { InlineArrowButton } from "@/components/ui/GhostNavButton";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 
 export default function Home() {
@@ -45,6 +45,8 @@ export default function Home() {
         <section className="bg-vault-ink py-8 md:py-12" id="simple-mode">
           <AdaptiveDashboard />
         </section>
+
+        <FraudShieldDemo />
 
         {/* Light band - features for 30 */}
         <section className="bg-white py-16 px-6 md:px-10">
