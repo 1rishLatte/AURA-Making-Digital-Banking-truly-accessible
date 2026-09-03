@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
 
@@ -57,7 +58,7 @@ export function AdaptiveProvider({ children }: { children: React.ReactNode }) {
   const [dyslexiaMode, setDyslexiaModeRaw] = useState(false);
   const [impairments, setImpairmentsRaw] = useState<ImpairmentFlags>(defaults);
 
-  // hydrate from localStorage
+  // hydrate from localStorage — intentional sync on mount for a11y preferences
   useEffect(() => {
     const p = localStorage.getItem("aura:profile") as Profile | null;
     const s = localStorage.getItem("aura:simpleMode");

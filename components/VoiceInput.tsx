@@ -7,37 +7,39 @@ interface VoiceInputProps {
   onValueChange?: (v: string) => void;
 }
 
-export function VoiceInput({ onTranscript, value, onValueChange }: VoiceInputProps) {
+export function VoiceInput({ onTranscript, onValueChange }: VoiceInputProps) {
   const [listening, setListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<unknown>(null);
 
   useEffect(() => {
-    const SR: any = (typeof window !== "undefined" && ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) || null;
+    const SR = (typeof window !== "undefined" && ((window as unknown as Record<string, unknown>).SpeechRecognition || (window as unknown as Record<string, unknown>).webkitSpeechRecognition)) as unknown as new () => unknown;
     if (!SR) return;
-    const rec = new SR();
+    const rec = new SR() as unknown as { continuous: boolean; interimResults: boolean; lang: string; onstart: (() => void) | null; onend: (() => void) | null; onerror: ((e: { error: string }) => void) | null; onresult: ((e: { results: unknown[] }) => void) | null; start: () => void; stop: () => void };
     rec.continuous = false;
     rec.interimResults = true;
     rec.lang = "en-IN";
     rec.onstart = () => setListening(true);
     rec.onend = () => setListening(false);
-    rec.onerror = (e: any) => setError(e.error === "not-allowed" ? "Microphone permission denied — please type instead." : "Voice error — please type.");
-    rec.onresult = (e: any) => {
-      const text = Array.from(e.results).map((r: any) => r[0].transcript).join("");
-      if (e.results[0]?.isFinal) onTranscript(text);
+    rec.onerror = (e) => setError(e.error === "not-allowed" ? "Microphone permission denied — please type instead." : "Voice error — please type.");
+    rec.onresult = (e) => {
+      const res = e.results as Array<{ 0: { transcript: string }; isFinal: boolean }>;
+      const text = Array.from(res).map((r) => r[0].transcript).join("");
+      if (res[0]?.isFinal) onTranscript(text);
       else onValueChange?.(text);
     };
-    recognitionRef.current = rec;
-    return () => { try { rec.stop(); } catch {} };
+    recognitionRef.current = rec as unknown;
+    return () => { try { (rec as unknown as { stop: () => void }).stop(); } catch {} };
   }, [onTranscript, onValueChange]);
 
   const toggle = () => {
-    if (!recognitionRef.current) {
+    const rec = recognitionRef.current as unknown as { start: () => void; stop: () => void } | null;
+    if (!rec) {
       setError("Voice not supported in this browser — please type.");
       return;
     }
-    if (listening) recognitionRef.current.stop();
-    else { setError(null); try { recognitionRef.current.start(); } catch {} }
+    if (listening) rec.stop();
+    else { setError(null); try { rec.start(); } catch {} }
   };
 
   return (

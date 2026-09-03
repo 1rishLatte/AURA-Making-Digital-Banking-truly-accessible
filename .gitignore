@@ -43,3 +43,7 @@ next-env.d.ts
 # previews
 preview-*.png
 
+
+shot*.js
+preview-*.png
+

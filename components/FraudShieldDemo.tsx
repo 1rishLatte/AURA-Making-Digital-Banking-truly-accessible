@@ -4,7 +4,6 @@ import { VoiceInput } from "./VoiceInput";
 import { FraudIntercept } from "./FraudIntercept";
 import { formatCurrency } from "@/lib/utils";
 import { scoreFraud } from "@/lib/fraud-rules";
-import { stripToIntent } from "@/lib/intent-strip";
 
 interface FraudResult {
   intent: string;
@@ -33,7 +32,7 @@ export function FraudShieldDemo() {
       if (!res.ok) throw new Error("Network error");
       const data: FraudResult = await res.json();
       setResult(data);
-    } catch (e) {
+    } catch {
       // fallback to client rule if API fails (offline demo guarantee)
       const fallback = scoreFraud({ query: q, amount: amt, new_device: q.toLowerCase().includes("unknown") }) as unknown as FraudResult;
       setResult(fallback);
@@ -56,8 +55,9 @@ export function FraudShieldDemo() {
     try {
       if (!navigator.credentials || !window.PublicKeyCredential) return false;
       // demo: existence check is enough — real challenge would be from server
-      // @ts-ignore mock get
-      const cred = await navigator.credentials.get({ publicKey: { challenge: new Uint8Array([1,2,3,4]), timeout: 15000, userVerification: "preferred" } } as any).catch(() => null);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore mock get — demo challenge
+      const cred = await (navigator.credentials.get as unknown as (opts: unknown) => Promise<unknown>)({ publicKey: { challenge: new Uint8Array([1,2,3,4]), timeout: 15000, userVerification: "preferred" } }).catch(() => null);
       return !!cred || true; // for demo, treat prompt as success even if no cred (device has biometric)
     } catch { return false; }
   };
