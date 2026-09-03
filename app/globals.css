@@ -138,7 +138,57 @@ html[data-dyslexia="true"] button {
   background: oklch(75% 0.04 255 / 0.25);
 }
 
-/* Focus visible ring - 3:1 contrast WCAG 2.4.11 */
+/* Visible Focus Indicators */
+*:focus { outline: none; }
+
+html[data-focus-style="standard"] *:focus-visible {
+  outline: 3px solid #53adfe !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 5px #0f111a !important;
+}
+
+html[data-focus-style="neon"] *:focus-visible {
+  outline: 4px solid #facc15 !important;
+  outline-offset: 4px !important;
+  box-shadow: 0 0 0 8px #0f111a, 0 0 16px rgba(250, 204, 21, 0.8) !important;
+  border-radius: 4px;
+}
+
+@keyframes focusPulse {
+  0%, 100% { outline-color: #facc15; box-shadow: 0 0 0 6px #0f111a, 0 0 12px #facc15; }
+  50% { outline-color: #38bdf8; box-shadow: 0 0 0 8px #0f111a, 0 0 24px #38bdf8; }
+}
+
+html[data-focus-style="pulsing"] *:focus-visible {
+  outline: 4px solid #facc15 !important;
+  outline-offset: 4px !important;
+  animation: focusPulse 1.2s infinite ease-in-out !important;
+}
+
+/* UI Scale */
+html[data-ui-scale="115"] { font-size: 115% !important; }
+html[data-ui-scale="130"] { font-size: 130% !important; }
+
+/* Stacked Button Layout */
+html[data-button-layout="stacked"] .action-group {
+  flex-direction: column !important;
+  width: 100% !important;
+}
+html[data-button-layout="stacked"] .action-group button {
+  width: 100% !important;
+  min-height: 56px !important;
+}
+
+/* Motion Suppression */
+html[data-reduced-motion="true"] *,
+html[data-reduced-motion="true"] *::before,
+html[data-reduced-motion="true"] *::after {
+  animation-duration: 0.001s !important;
+  transition-duration: 0.001s !important;
+  scroll-behavior: auto !important;
+}
+
+/* Legacy focus ring - fallback */
 *:focus-visible {
   outline: 2px solid var(--color-frost);
   outline-offset: 2px;

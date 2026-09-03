@@ -17,6 +17,14 @@ export const AccessibilityDrawer: React.FC = () => {
     tremorFilterEnabled,
     setTremorFilterEnabled,
     trustedContact,
+    focusStyle,
+    setFocusStyle,
+    uiScale,
+    setUiScale,
+    reducedMotion,
+    setReducedMotion,
+    buttonLayout,
+    setButtonLayout,
     resetAll,
   } = useAccessibility();
 
@@ -140,6 +148,80 @@ export const AccessibilityDrawer: React.FC = () => {
                     className="w-5 h-5 accent-[#1c53bd] cursor-pointer"
                   />
                 </div>
+
+                {/* Focus Indicator Selector */}
+                <div className="space-y-2">
+                  <p className="text-[11px] font-mono uppercase text-[#aeaeae]">Focus Indicator (Head / Foot Mouse)</p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: 'standard', label: 'Blue Ring' },
+                      { id: 'neon', label: 'Neon Yellow' },
+                      { id: 'pulsing', label: 'Pulsing' },
+                    ].map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => setFocusStyle(item.id as typeof focusStyle)}
+                        className={`p-2.5 rounded-[8px] border text-[12px] font-medium transition-all ${
+                          focusStyle === item.id ? 'bg-[#141414] border-[#facc15] text-[#facc15]' : 'bg-[#0f111a] border-[#2a2a2a] text-[#aeaeae]'
+                        }`}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* UI Scaling */}
+                <div className="space-y-2">
+                  <p className="text-[11px] font-mono uppercase text-[#aeaeae]">UI Scale & Text Zoom</p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: '100', label: '100%' },
+                      { id: '115', label: '115%' },
+                      { id: '130', label: '130%' },
+                    ].map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => setUiScale(item.id as typeof uiScale)}
+                        className={`p-2.5 rounded-[8px] border text-[12px] font-medium transition-all ${
+                          uiScale === item.id ? 'bg-[#141414] border-[#53adfe] text-[#ffffff]' : 'bg-[#0f111a] border-[#2a2a2a] text-[#aeaeae]'
+                        }`}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Motion & Button Layout Toggles */}
+                <div className="flex items-center justify-between p-3 bg-[#141414] border border-[#2a2a2a] rounded-[8px]">
+                  <div>
+                    <p className="text-[14px] text-[#ffffff]">Suppress Animations</p>
+                    <p className="text-[12px] text-[#aeaeae]">Disables all motion effects</p>
+                  </div>
+                  <button
+                    onClick={() => setReducedMotion(!reducedMotion)}
+                    className={`w-12 h-6 rounded-full relative transition-colors ${reducedMotion ? 'bg-[#53adfe]' : 'bg-[#2a2a2a]'}`}
+                    aria-label="Toggle suppress animations"
+                  >
+                    <div className={`w-5 h-5 rounded-full bg-[#ffffff] absolute top-0.5 transition-transform ${reducedMotion ? 'translate-x-6' : 'translate-x-0.5'}`} />
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between p-3 bg-[#141414] border border-[#2a2a2a] rounded-[8px]">
+                  <div>
+                    <p className="text-[14px] text-[#ffffff]">Stack Action Buttons</p>
+                    <p className="text-[12px] text-[#aeaeae]">Full-width targets for foot mice</p>
+                  </div>
+                  <button
+                    onClick={() => setButtonLayout(buttonLayout === 'stacked' ? 'default' : 'stacked')}
+                    className={`w-12 h-6 rounded-full relative transition-colors ${buttonLayout === 'stacked' ? 'bg-[#53adfe]' : 'bg-[#2a2a2a]'}`}
+                    aria-label="Toggle stack action buttons"
+                  >
+                    <div className={`w-5 h-5 rounded-full bg-[#ffffff] absolute top-0.5 transition-transform ${buttonLayout === 'stacked' ? 'translate-x-6' : 'translate-x-0.5'}`} />
+                  </button>
+                </div>
+
                 {/* Trusted Contact Status */}
                 <div className="flex items-center justify-between p-3 rounded-[8px] border border-[#2a2a2a] bg-[#141414]">
                   <div>

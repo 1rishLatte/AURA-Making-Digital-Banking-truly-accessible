@@ -3,9 +3,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { useAccessibility } from '@/lib/adaptive-context';
+import { useAuth } from '@/context/AuthContext';
 
 export const Header: React.FC = () => {
   const { setIsDrawerOpen, activeProfile } = useAccessibility();
+  const { logout } = useAuth();
 
   return (
     <header className="w-full bg-[#0f111a] border-b border-[#2a2a2a] sticky top-0 z-40 px-2 md:px-6 py-1 flex items-center justify-between gap-1 overflow-hidden">
@@ -49,9 +51,9 @@ export const Header: React.FC = () => {
         </button>
 
         {/* Log Out Action */}
-        <Link href="/api/logout" className="text-[#aeaeae] hover:text-[#ffffff] text-[12px] md:text-[14px] px-1.5 md:px-2 py-1 md:py-1.5 transition-colors whitespace-nowrap">
+        <button onClick={() => logout()} className="text-[#aeaeae] hover:text-[#ffffff] text-[14px] px-2 py-1.5 transition-colors">
           Log Out
-        </Link>
+        </button>
       </nav>
     </header>
   );

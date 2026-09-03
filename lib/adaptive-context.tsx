@@ -3,6 +3,9 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 
 export type AccessibilityProfile = 'standard' | 'motor' | 'cognitive' | 'vision';
+export type FocusIndicatorStyle = 'standard' | 'neon' | 'pulsing';
+export type UIScale = '100' | '115' | '130';
+export type ButtonLayout = 'default' | 'stacked';
 
 export interface TrustedContact {
   fullName: string;
@@ -24,6 +27,15 @@ interface AccessibilityContextType {
   setIsDrawerOpen: (open: boolean) => void;
   trustedContact: TrustedContact | null;
   setTrustedContact: (c: TrustedContact | null) => void;
+  // New UI reconfiguration
+  focusStyle: FocusIndicatorStyle;
+  setFocusStyle: (s: FocusIndicatorStyle) => void;
+  uiScale: UIScale;
+  setUiScale: (s: UIScale) => void;
+  reducedMotion: boolean;
+  setReducedMotion: (v: boolean) => void;
+  buttonLayout: ButtonLayout;
+  setButtonLayout: (v: ButtonLayout) => void;
   resetAll: () => void;
   // Legacy aliases for existing components (keep build green)
   profile: AccessibilityProfile;
@@ -46,6 +58,10 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
   const [tremorFilterEnabled, setTremorFilterEnabled] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [trustedContact, setTrustedContact] = useState<TrustedContact | null>(null);
+  const [focusStyle, setFocusStyle] = useState<FocusIndicatorStyle>('neon');
+  const [uiScale, setUiScale] = useState<UIScale>('100');
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const [buttonLayout, setButtonLayout] = useState<ButtonLayout>('default');
 
   useEffect(() => {
     const root = document.documentElement;
@@ -63,6 +79,12 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       root.classList.remove('theme-vision-aaa');
     }
 
+    // New UI reconfiguration attributes
+    root.setAttribute('data-focus-style', focusStyle);
+    root.setAttribute('data-ui-scale', uiScale);
+    root.setAttribute('data-reduced-motion', String(reducedMotion));
+    root.setAttribute('data-button-layout', buttonLayout);
+
     // Apply CSS vars for backward compat (simpleMode etc. drive --aura-target)
     const targetMin = simpleViewEnabled || activeProfile === 'cognitive' ? 72 : activeProfile === 'vision' ? 72 : activeProfile === 'motor' ? 68 : dyslexiaFontEnabled ? 48 : 44;
     const fontScale = simpleViewEnabled || activeProfile === 'cognitive' ? 1.35 : activeProfile === 'vision' ? 1.3 : activeProfile === 'motor' ? 1.05 : dyslexiaFontEnabled ? 1.08 : 1;
@@ -77,8 +99,9 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       localStorage.setItem('aura:impairments', JSON.stringify({ cognitive: simpleViewEnabled, motor: activeProfile === 'motor', vision: activeProfile === 'vision', hearing: false, dyslexia: dyslexiaFontEnabled, anxiety: false }));
       if (trustedContact) localStorage.setItem('aura:trustedContact', JSON.stringify(trustedContact));
       else localStorage.removeItem('aura:trustedContact');
+      localStorage.setItem('aura_ui_config_v1', JSON.stringify({ focusStyle, uiScale, reducedMotion, buttonLayout }));
     } catch {}
-  }, [dyslexiaFontEnabled, activeProfile, simpleViewEnabled, trustedContact]);
+  }, [dyslexiaFontEnabled, activeProfile, simpleViewEnabled, trustedContact, focusStyle, uiScale, reducedMotion, buttonLayout]);
 
   // Hydrate once
   useEffect(() => {
@@ -91,6 +114,14 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       if (s) setSimpleViewEnabled(s === 'true');
       if (d) setDyslexiaFontEnabled(d === 'true');
       if (tc) setTrustedContact(JSON.parse(tc));
+      const saved = localStorage.getItem('aura_ui_config_v1');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.focusStyle) setFocusStyle(parsed.focusStyle);
+        if (parsed.uiScale) setUiScale(parsed.uiScale);
+        if (parsed.reducedMotion !== undefined) setReducedMotion(parsed.reducedMotion);
+        if (parsed.buttonLayout) setButtonLayout(parsed.buttonLayout);
+      }
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -134,6 +165,14 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsDrawerOpen,
     trustedContact,
     setTrustedContact,
+    focusStyle,
+    setFocusStyle,
+    uiScale,
+    setUiScale,
+    reducedMotion,
+    setReducedMotion,
+    buttonLayout,
+    setButtonLayout,
     resetAll,
     // aliases
     profile: activeProfile,
@@ -151,7 +190,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       else if (f.cognitive) setActiveProfile('cognitive');
     },
     vars: legacyVars,
-  }), [activeProfile, dyslexiaFontEnabled, simpleViewEnabled, tremorFilterEnabled, isDrawerOpen, trustedContact, impairments, legacyVars, resetAll]);
+  }), [activeProfile, dyslexiaFontEnabled, simpleViewEnabled, tremorFilterEnabled, isDrawerOpen, trustedContact, focusStyle, uiScale, reducedMotion, buttonLayout, impairments, legacyVars, resetAll]);
 
   return (
     <AccessibilityContext.Provider value={value}>

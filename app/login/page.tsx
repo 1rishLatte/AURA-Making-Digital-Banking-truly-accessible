@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
   const [id, setId] = useState("");
   const [pass, setPass] = useState("");
   const [err, setErr] = useState<string | null>(null);
@@ -22,6 +24,7 @@ export default function LoginPage() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) { setErr(data.error ?? "Something went wrong"); return; }
+      login('demo');
       router.push("/");
       router.refresh();
     } catch {
