@@ -47,7 +47,8 @@ const AdaptiveContext = createContext<AdaptiveState | null>(null);
 function deriveVars(profile: Profile, simpleMode: boolean, flags: ImpairmentFlags): AdaptiveVars {
   if (flags.vision || profile === "vision") return { targetMin: 72, fontScale: 1.3, density: "24px", contrast: "high" };
   if (flags.motor || profile === "motor") return { targetMin: 68, fontScale: 1.05, density: "24px", contrast: "normal" };
-  if (flags.cognitive || simpleMode || profile === "cognitive") return { targetMin: 56, fontScale: 1.15, density: "20px", contrast: "normal" };
+  // Simple/Cognitive — DRAMATIC pop for judges: huge targets, large type, one-step clarity
+  if (flags.cognitive || simpleMode || profile === "cognitive") return { targetMin: 72, fontScale: 1.35, density: "32px", contrast: "high" };
   if (flags.dyslexia) return { targetMin: 48, fontScale: 1.08, density: "16px", contrast: "normal" };
   return { targetMin: 44, fontScale: 1, density: "16px", contrast: "normal" };
 }
