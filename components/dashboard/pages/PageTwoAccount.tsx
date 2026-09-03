@@ -8,8 +8,8 @@ export const PageTwoAccount: React.FC = () => {
         <h3 className="text-[#ffffff] text-[18px] font-normal">Account Details</h3>
         <p className="text-[#aeaeae] text-[13px] mt-2">Balance breakdown, transaction history, and settings — simplified for clarity.</p>
         <div className="mt-4 space-y-2 text-[13px] font-mono">
-          <div className="flex justify-between"><span className="text-[#aeaeae]">Checking</span><span className="text-[#ffffff]">$84,200.00</span></div>
-          <div className="flex justify-between"><span className="text-[#aeaeae]">Savings</span><span className="text-[#ffffff]">$40,300.00</span></div>
+          <div className="flex justify-between"><span className="text-[#aeaeae]">Checking</span><span className="text-[#ffffff]">₹84,200.00</span></div>
+          <div className="flex justify-between"><span className="text-[#aeaeae]">Savings</span><span className="text-[#ffffff]">₹40,300.00</span></div>
         </div>
       </div>
       <div className="rounded-[8px] bg-[#0f111a] border border-[#2a2a2a] p-6">

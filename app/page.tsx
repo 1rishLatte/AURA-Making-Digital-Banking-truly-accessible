@@ -57,7 +57,7 @@ export default function Home() {
                 <div className="mt-6 grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-[#aeaeae] text-[11px] font-mono uppercase tracking-[0.08em]">Balance</p>
-                    <p className="text-[#ffffff] text-[28px] font-normal tracking-[-0.8px]">$124,500.00</p>
+                    <p className="text-[#ffffff] text-[28px] font-normal tracking-[-0.8px]">₹1,24,500.00</p>
                     <p className="text-[#aeaeae] text-[12px] font-mono">Across 1 account • Updated just now</p>
                   </div>
                   <div className="flex flex-col items-end justify-center">

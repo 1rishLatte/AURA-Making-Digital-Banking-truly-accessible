@@ -55,7 +55,7 @@ export const AdaptiveDashboard: React.FC = () => {
           ACCOUNT OVERVIEW
         </span>
         <h1 className={`font-normal leading-[0.95] tracking-[-3.36px] ${isVision ? 'text-[#000000]' : 'text-[#ffffff]'} ${isSimple ? 'text-[36px] md:text-[56px]' : 'text-[48px] md:text-[84px]'}`}>
-          $124,500.00
+          ₹1,24,500.00
         </h1>
         <p className="text-[#aeaeae] text-[16px] font-normal">
           Vault Balance · Portfolio Protected {isSimple && '• Simplified view'}
@@ -68,7 +68,7 @@ export const AdaptiveDashboard: React.FC = () => {
           <div className="bg-[#141414] border border-[#2a2a2a] rounded-[8px] p-8 space-y-4">
             <span className="text-[#aeaeae] text-[12px] font-mono uppercase">STEP 1 OF 1</span>
             <h3 className="text-[20px] font-normal text-[#ffffff]">Your Balance</h3>
-            <p className="text-[32px] font-normal text-[#ffffff]">$124,500.00</p>
+            <p className="text-[32px] font-normal text-[#ffffff]">₹1,24,500.00</p>
             <button onClick={() => withTremorFilter(() => alert('Balance details opened'))} className={`w-full bg-[#ffffff] text-[#0f111a] rounded-[8px] font-normal hover:bg-[#efefef] ${isMotor ? 'py-5 text-[18px]' : 'py-3 text-[14px]'}`}>View Details</button>
           </div>
           <div id="trusted-contact-manager" className="scroll-mt-24">
@@ -89,7 +89,7 @@ export const AdaptiveDashboard: React.FC = () => {
           <h3 className="text-[24px] font-normal text-[#ffffff]">Execute Wire Transfer</h3>
 
           <div className="space-y-3">
-            <label className="text-[#aeaeae] text-[12px] font-mono uppercase tracking-[0.018em] block">Amount (USD)</label>
+            <label className="text-[#aeaeae] text-[12px] font-mono uppercase tracking-[0.018em] block">Amount (INR — ₹)</label>
             <input value={amount} onChange={(e) => setAmount(e.target.value)} inputMode="numeric" placeholder="2500" className="w-full bg-[#0f111a] border border-[#2a2a2a] rounded-[8px] px-4 py-3 text-[#ffffff] text-[14px] font-mono focus:outline-none focus:border-[#aeaeae]" />
             <label className="text-[#aeaeae] text-[12px] font-mono uppercase tracking-[0.018em] block">Recipient</label>
             <input value={recipient} onChange={(e) => setRecipient(e.target.value)} placeholder="e.g., Alex Rivera" className="w-full bg-[#0f111a] border border-[#2a2a2a] rounded-[8px] px-4 py-3 text-[#ffffff] text-[14px] font-normal focus:outline-none focus:border-[#aeaeae]" />
