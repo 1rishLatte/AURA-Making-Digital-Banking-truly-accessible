@@ -37,19 +37,19 @@ export default function LoginPage() {
       </header>
       <main className="flex-1 flex items-center justify-center px-6 py-12 bg-ash-mist">
         <div className="w-full max-w-[560px] rounded-[8px] bg-white p-8 md:p-10 shadow-sm">
-          <p className="text-[14px] uppercase tracking-[0.08em] text-silver-veil" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>Single demo ID • India • ap-south-1</p>
-          <h1 className="text-[40px] leading-[1.06] tracking-[-1.2px] text-vault-ink mt-2" style={{ fontFamily: "var(--font-manrope), system-ui" }}>Welcome to your vault</h1>
-          <p className="text-[14px] text-charcoal mt-2">Use the single demo ID below — no CAPTCHA, passive check runs in background.</p>
+          <p className="text-[14px] uppercase tracking-[0.08em] text-silver-veil" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>Demo login • India</p>
+          <h1 className="text-[40px] leading-[1.06] tracking-[-1.2px] text-vault-ink mt-2" style={{ fontFamily: "var(--font-manrope), system-ui" }}>Welcome</h1>
+          <p className="text-[16px] text-charcoal mt-2">Use the test ID below. No puzzle. No hard check.</p>
 
           <div className="mt-6 rounded-[8px] bg-vault-ink text-white p-4 border border-white/10">
-            <p className="text-[12px] uppercase tracking-[0.08em] text-frost" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>Demo credentials for judging</p>
-            <p className="text-[14px] mt-1">ID: <code className="px-1.5 py-0.5 rounded bg-white/10">AURA-DEMO-001</code> or <code className="px-1.5 py-0.5 rounded bg-white/10">demo@aura.local</code></p>
-            <p className="text-[14px] mt-1">Passcode: <code className="px-1.5 py-0.5 rounded bg-white/10">AURA2026</code></p>
+            <p className="text-[12px] uppercase tracking-[0.08em] text-frost" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>Test ID for demo</p>
+            <p className="text-[16px] mt-1">ID: <code className="px-1.5 py-0.5 rounded bg-white/10">AURA-DEMO-001</code></p>
+            <p className="text-[14px] mt-1">Code: <code className="px-1.5 py-0.5 rounded bg-white/10">AURA2026</code></p>
           </div>
 
           <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-5" noValidate>
             <div className="flex flex-col gap-2">
-              <label htmlFor="aura-id" className="text-[14px] text-vault-ink font-medium">AURA ID</label>
+              <label htmlFor="aura-id" className="text-[14px] text-vault-ink font-medium">ID</label>
               <input
                 id="aura-id"
                 value={id}
@@ -63,7 +63,7 @@ export default function LoginPage() {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label htmlFor="aura-pass" className="text-[14px] text-vault-ink font-medium">Passcode</label>
+              <label htmlFor="aura-pass" className="text-[14px] text-vault-ink font-medium">Code</label>
               <input
                 id="aura-pass"
                 type="password"
@@ -78,9 +78,9 @@ export default function LoginPage() {
             </div>
             {err && <p id="login-error" role="alert" className="text-[14px] text-red-700 bg-red-50 border border-red-200 rounded-[8px] px-4 py-3">{err}</p>}
             <button type="submit" disabled={loading} className="min-h-[56px] rounded-[8px] bg-vault-ink text-white text-[16px] font-medium disabled:opacity-50">
-              {loading ? "Checking…" : "Unlock vault — hold not needed here"}
+              {loading ? "Checking…" : "Enter"}
             </button>
-            <p className="text-[12px] text-silver-veil text-center">No CAPTCHA. Verification is passive — background risk + PAT. No timer, no puzzle.</p>
+            <p className="text-[12px] text-silver-veil text-center">No puzzle. No timer.</p>
           </form>
         </div>
       </main>

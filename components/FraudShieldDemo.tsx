@@ -66,13 +66,13 @@ export function FraudShieldDemo() {
   return (
     <section className="bg-white py-12 px-6 md:px-10 border-t border-silver-veil/30" id="fraud-demo">
       <div className="max-w-[1280px] mx-auto">
-        <p className="text-[14px] uppercase tracking-[0.08em] text-silver-veil" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>Proactive Fraud Shield — Real Supabase + Intent-only</p>
-        <h2 className="text-[40px] leading-[1.06] tracking-[-1.2px] text-vault-ink mt-2" style={{ fontFamily: "var(--font-manrope), system-ui" }}>Try a transfer. We delay, never deny.</h2>
-        <p className="text-[16px] text-charcoal mt-3 max-w-[60ch]">Voice is on-device — only transfer details leave the device. Raw audio never stored. Real emergency? 5s pause → 1.5s hold → funds move.</p>
+        <p className="text-[14px] uppercase tracking-[0.08em] text-silver-veil" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>Safe transfers</p>
+        <h2 className="text-[40px] leading-[1.06] tracking-[-1.2px] text-vault-ink mt-2" style={{ fontFamily: "var(--font-manrope), system-ui" }}>Try sending money. We keep you safe.</h2>
+        <p className="text-[16px] text-charcoal mt-3 max-w-[60ch]">Your voice stays on your phone. We check every transfer. If it looks risky, we pause. You can still send it.</p>
 
         <form onSubmit={handleSubmit} className="mt-8 grid md:grid-cols-[1.2fr_0.4fr_auto] gap-4 items-end bg-ash-mist p-6 rounded-[8px]">
           <div className="flex flex-col gap-2">
-            <label htmlFor="fraud-query" className="text-[14px] text-vault-ink">Describe the transfer (voice or type)</label>
+            <label htmlFor="fraud-query" className="text-[14px] text-vault-ink">What do you want to send? (speak or type)</label>
             <input
               id="fraud-query"
               value={query}
@@ -81,7 +81,7 @@ export function FraudShieldDemo() {
               className="min-h-[48px] rounded-[8px] border border-silver-veil bg-white px-4 text-[16px] focus:outline-none focus:ring-2 focus:ring-frost"
               aria-describedby="fraud-help"
             />
-            <span id="fraud-help" className="text-[12px] text-silver-veil">Tip: try “Transfer ₹5,000 to Sunita Devi” (benign) vs the bail scam.</span>
+            <span id="fraud-help" className="text-[12px] text-silver-veil">Tip: Try “Send ₹5,000 to Sunita Devi”.</span>
             <div className="mt-2"><VoiceInput onTranscript={t => setQuery(t)} value={query} onValueChange={setQuery} /></div>
           </div>
           <div className="flex flex-col gap-2">

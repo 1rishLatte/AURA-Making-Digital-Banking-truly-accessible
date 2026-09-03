@@ -56,17 +56,17 @@ export function NoCaptchaSection() {
   return (
     <section className="bg-ash-mist py-16 md:py-20 px-6 md:px-10 border-t border-silver-veil/20" id="no-captcha">
       <div className="max-w-[1280px] mx-auto">
-        <Eyebrow>No CAPTCHA — ever</Eyebrow>
+        <Eyebrow>No puzzles</Eyebrow>
         <h2 className="text-[40px] md:text-[48px] leading-[1.06] tracking-[-1.44px] text-vault-ink mt-3" style={{ fontFamily: "var(--font-manrope), system-ui" }}>
-          Visual CAPTCHAs fail all four vectors. We eliminated them.
+          No hard puzzles. No hard reading.
         </h2>
         <p className="text-[16px] text-charcoal mt-3 max-w-[72ch]">
-          Distorted text and grid puzzles are unreadable for motor, cognitive, visual, and sensory users. AURA uses <strong>passive background risk + PATs + WebAuthn</strong> — no puzzle, no distorted audio, no countdown.
+          Hard puzzles are hard to read and tap. We removed them. We check in the background. No puzzle. No hard sound. No timer.
         </p>
 
         {/* Primary shield */}
         <div className="mt-8">
-          <h3 className="text-[14px] uppercase tracking-[0.08em] text-silver-veil mb-3" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>1 · Passive & Invisible — The Primary Shield</h3>
+          <h3 className="text-[14px] uppercase tracking-[0.08em] text-silver-veil mb-3" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>1. We check in the background</h3>
           <VerifyShield
             onVerified={(r) => setVerified(r)}
             onNeedFallback={(r) => { setVerified(r); setFallback(r.fallback ?? "tactile_hold"); }}
@@ -77,7 +77,7 @@ export function NoCaptchaSection() {
 
         {/* Biometric / hardware */}
         <div className="mt-10">
-          <h3 className="text-[14px] uppercase tracking-[0.08em] text-silver-veil mb-3" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>2 · Biometric & Hardware Native</h3>
+          <h3 className="text-[14px] uppercase tracking-[0.08em] text-silver-veil mb-3" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>2. Use your face or finger</h3>
           <div className="grid md:grid-cols-2 gap-4">
             <FeatureCard title="WebAuthn / Passkeys">Face ID, Touch ID, Windows Hello replaces CAPTCHA — navigator.credentials.get with publicKey, userVerification preferred, no puzzle.</FeatureCard>
             <PushApproveCard onApprove={() => setPushDone(true)} onFallback={() => setFallback("push_approve")} />
@@ -87,7 +87,7 @@ export function NoCaptchaSection() {
 
         {/* Vector adaptations */}
         <div className="mt-10">
-          <h3 className="text-[14px] uppercase tracking-[0.08em] text-silver-veil mb-3" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>Vector-Specific Adaptations — never a visual grid</h3>
+          <h3 className="text-[14px] uppercase tracking-[0.08em] text-silver-veil mb-3" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>How we help different needs</h3>
           <div className="grid md:grid-cols-2 gap-6">
             {/* Motor */}
             <div className="rounded-[8px] bg-white p-6 border border-silver-veil/30">

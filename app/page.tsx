@@ -14,18 +14,18 @@ export default function Home() {
         {/* Hero vault */}
         <section className="relative overflow-hidden bg-vault-ink text-white min-h-[560px] flex items-center justify-center px-4 sm:px-6 md:px-10 py-20 max-w-[100vw]" style={{ background: "radial-gradient(1200px 600px at 70% 20%, #1c233a 0%, #0f111a 55%, #000000 100%)" }}>
           <div className="max-w-[1280px] w-full mx-auto flex flex-col items-center text-center gap-8 min-w-0 px-2 sm:px-0">
-            <Eyebrow className="text-frost">AURA — Adaptive Universal Banking</Eyebrow>
+            <Eyebrow className="text-frost">Banking for everyone</Eyebrow>
             <h1 className="text-[32px] xs:text-[36px] sm:text-[48px] md:text-[84px] lg:text-[96px] leading-[0.90] tracking-[-0.04em] max-w-[900px] break-words text-balance" style={{ fontFamily: "var(--font-manrope), system-ui" }}>
-              Banking that adapts to <span className="text-frost">you</span>.
+              Banking made <span className="text-frost">simple</span>.
             </h1>
-            <p className="max-w-[640px] text-[16px] md:text-[22px] leading-[1.2] tracking-[-0.44px] text-silver-veil">
-              One vault, every need — motor, vision, cognitive, dyslexia. Voice-first, high-contrast, 72px targets. Proactive fraud shield that delays, never denies.
+            <p className="max-w-[640px] text-[16px] md:text-[22px] leading-[1.4] tracking-[-0.44px] text-silver-veil">
+              Big text. Big buttons. Speak or tap. We keep your money safe.
             </p>
             <div className="flex flex-wrap gap-3 justify-center pt-2">
-              <a href="#dashboard" className="inline-flex items-center gap-3 rounded-[8px] bg-charcoal/60 px-4 py-3 text-[14px] text-white min-h-[44px]">Explore dashboard <span className="h-2 w-2 rounded-sm shrink-0" style={{ background: "linear-gradient(90deg, #1c53bd, #53adfe)" }} aria-hidden /></a>
-              <a href="#simple-mode" className="inline-flex items-center rounded-[8px] border border-white/20 px-4 py-3 text-[14px] text-white min-h-[44px]">Watch Simple Mode</a>
+              <a href="#dashboard" className="inline-flex items-center gap-3 rounded-[8px] bg-charcoal/60 px-4 py-3 text-[14px] text-white min-h-[44px]">See your account <span className="h-2 w-2 rounded-sm shrink-0" style={{ background: "linear-gradient(90deg, #1c53bd, #53adfe)" }} aria-hidden /></a>
+              <a href="#simple-mode" className="inline-flex items-center rounded-[8px] border border-white/20 px-4 py-3 text-[14px] text-white min-h-[44px]">Make it simpler</a>
             </div>
-            <p className="text-[12px] tracking-[0.08em] uppercase text-silver-veil" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>INR • en-IN • Asia/Kolkata • WCAG 2.2 AA • Atkinson Hyperlegible</p>
+            <p className="text-[12px] tracking-[0.08em] uppercase text-silver-veil" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>India • Easy to read • Easy to tap</p>
           </div>
           <div className="absolute bottom-0 left-0 right-0 h-px bg-white/10" />
         </section>
@@ -33,11 +33,11 @@ export default function Home() {
         {/* Light band */}
         <section className="bg-ash-mist py-16 md:py-24 px-6 md:px-10">
           <div className="max-w-[1280px] mx-auto grid md:grid-cols-2 gap-6">
-            <FeatureCard eyebrow="Privacy — on-device" title="We listen on-device, we send intent-only.">
-              Voice speech-to-text runs in your browser. Only transfer details leave the device — raw audio never stored.
+            <FeatureCard eyebrow="Your voice is safe" title="Your voice stays on your phone.">
+              We do not save your voice. We only send what you want to do. Nothing else leaves your phone.
             </FeatureCard>
-            <FeatureCard eyebrow="Smart friction" title="AURA delays; it never denies.">
-              Scam panic vs real emergency: 5s plain-language pause — “This is a new account and a large transfer. Take 5 seconds to review.” — then 1.5s hold completes. Borrowed device? Trusted Contact 1-tap or priority human handoff.
+            <FeatureCard eyebrow="We pause, not block" title="Take 5 seconds to think.">
+              Is this safe? You decide. Hold for 1.5 seconds to send. If you need help, ask someone you trust or call us.
             </FeatureCard>
           </div>
         </section>
@@ -54,12 +54,12 @@ export default function Home() {
         {/* Light band - features for 30 */}
         <section className="bg-white py-16 px-6 md:px-10">
           <div className="max-w-[1280px] mx-auto">
-            <Eyebrow>Five vectors cover thirty</Eyebrow>
-            <h2 className="text-[40px] md:text-[48px] leading-[1.06] tracking-[-1.44px] text-vault-ink mt-3" style={{ fontFamily: "var(--font-manrope), system-ui" }}>One parameterized engine. Five live journeys.</h2>
+            <Eyebrow>Works for everyone</Eyebrow>
+            <h2 className="text-[40px] md:text-[48px] leading-[1.06] tracking-[-1.44px] text-vault-ink mt-3" style={{ fontFamily: "var(--font-manrope), system-ui" }}>One design. Works for everyone.</h2>
             <div className="grid md:grid-cols-3 gap-6 mt-10">
-              <FeatureCard title="Neuro & Cognitive">ASD, ADHD, Down, ID, Dyslexia, Aphasia → Simple Mode (1 action/card, Atkinson, 65ch, voice+card dual output).</FeatureCard>
-              <FeatureCard title="Physical & Motor">CP, MD, SCI, MS, ALS, Parkinson, RA → 68-72px targets, hold-not-drag, jitter forgiveness, Space hold.</FeatureCard>
-              <FeatureCard title="Sensory">Blindness, Deafness, Deaf-Blindness, SPD → SR landmarks + typed fallback + reduced-motion, near-monochrome Eco.</FeatureCard>
+              <FeatureCard title="Thinking and reading">For trouble reading or focusing. Big text. One clear step at a time.</FeatureCard>
+              <FeatureCard title="Hands and movement">For shaky hands or hard to tap. Big buttons. No dragging. Hold to confirm.</FeatureCard>
+              <FeatureCard title="Seeing and hearing">For low vision or hearing loss. Loud and clear. Works with screen readers.</FeatureCard>
             </div>
           </div>
         </section>
