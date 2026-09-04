@@ -54,7 +54,7 @@ export const AdaptiveDashboard: React.FC = () => {
         <span className="text-[#aeaeae] text-[14px] font-mono uppercase tracking-[0.018em] block">
           ACCOUNT OVERVIEW
         </span>
-        <h1 className={`font-normal leading-[0.95] tracking-[-3.36px] ${isVision ? 'text-[#000000]' : 'text-[#ffffff]'} ${isSimple ? 'text-[36px] md:text-[56px]' : 'text-[48px] md:text-[84px]'}`}>
+        <h1 className={`font-normal leading-[1.05] tracking-[-3.36px] overflow-visible py-1 ${isVision ? 'text-[#000000]' : 'text-[#ffffff]'} ${isSimple ? 'text-[36px] md:text-[56px]' : 'text-[48px] md:text-[84px]'}`}>
           ₹1,24,500.00
         </h1>
         <p className="text-[#aeaeae] text-[16px] font-normal">

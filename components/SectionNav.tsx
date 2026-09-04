@@ -41,9 +41,9 @@ export function SectionHeader({ number, title, subtitle, id }: { number: string;
   return (
     <div id={id} className="flex items-center gap-4 mb-6 scroll-mt-[96px]">
       <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-vault-ink text-white text-[14px] font-semibold shrink-0">{number}</span>
-      <div className="min-w-0">
-        <h2 className="text-[24px] md:text-[32px] leading-none tracking-[-0.5px] font-medium text-vault-ink" style={{ fontFamily: "var(--font-manrope), system-ui" }}>{title}</h2>
-        {subtitle && <p className="text-[13px] text-silver-veil mt-1">{subtitle}</p>}
+      <div className="min-w-0 overflow-visible">
+        <h2 className="text-[24px] md:text-[32px] leading-[1.25] tracking-[-0.5px] font-medium text-vault-ink overflow-visible py-0.5" style={{ fontFamily: "var(--font-manrope), system-ui" }}>{title}</h2>
+        {subtitle && <p className="text-[13px] text-silver-veil mt-1 leading-[1.4]">{subtitle}</p>}
       </div>
     </div>
   );
