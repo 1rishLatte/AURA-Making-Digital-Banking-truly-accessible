@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useAccessibility } from '@/lib/adaptive-context';
 import { TrustedContactManager } from '@/components/safety/TrustedContactManager';
+import { VoiceInput } from '@/components/VoiceInput';
 
 // Dynamic import for heavy GSAP canvas — no SSR
 const SafetyConfirmCanvas = dynamic(() => import('@/components/SafetyConfirmCanvas').then((m) => m.SafetyConfirmCanvas), {
@@ -19,6 +20,30 @@ export const AdaptiveDashboard: React.FC = () => {
   const [fraudResult, setFraudResult] = useState<{ threatScore: number; threatCategory: string; message: string; action: string } | null>(null);
   const [checking, setChecking] = useState(false);
   const [executed, setExecuted] = useState(false);
+  const [voiceTranscript, setVoiceTranscript] = useState('');
+  const [voiceStatus, setVoiceStatus] = useState<string | null>(null);
+
+  const handleVoiceTranscript = (text: string) => {
+    setVoiceTranscript(text);
+    setVoiceStatus(`Heard: "${text}" — processing locally...`);
+    // Simple local parsing: extract amount (₹/rupees) and recipient
+    const lower = text.toLowerCase();
+    const amtMatch = lower.match(/(?:₹|rs\.?|rupees?)\s*([\d,]+)|(\d+)\s*(?:rupees|rs)/i) || lower.match(/(\d{3,6})/);
+    const amtStr = amtMatch ? (amtMatch[1] || amtMatch[2] || amtMatch[3] || amtMatch[0]).replace(/[,₹\s]/g, '') : '';
+    if (amtStr && /^\d+$/.test(amtStr)) {
+      const n = Number(amtStr.replace(/,/g, ''));
+      if (n >= 100 && n <= 500000) setAmount(String(n));
+    }
+    // Try to extract recipient after "to"
+    const toMatch = lower.match(/to\s+([a-z\s]{3,20})/i);
+    if (toMatch) {
+      const name = toMatch[1].trim().split(/\s+/).slice(0,3).join(' ');
+      // Capitalize
+      const cap = name.split(' ').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+      if (cap.length > 2) setRecipient(cap);
+    }
+    setTimeout(() => setVoiceStatus(null), 3000);
+  };
 
   // Tremor filter: debounce rapid clicks
   const lastClickRef = React.useRef(0);
@@ -162,15 +187,17 @@ export const AdaptiveDashboard: React.FC = () => {
           </span>
           <h3 className="text-[24px] font-normal text-[#ffffff]">Voice Action Agent</h3>
           
-          <div className="p-6 bg-[#0f111a] border border-[#2a2a2a] rounded-[8px] text-center space-y-4">
-            <button className="w-16 h-16 mx-auto rounded-full bg-[#1c53bd] text-[#ffffff] flex items-center justify-center text-[24px] hover:opacity-90 transition-opacity">
-              🎤
-            </button>
-            <p className="text-[#ffffff] text-[14px]">Tap and speak your request...</p>
-            
-            {/* CONTEXTUAL DISCLAIMER — RELOCATED HERE */}
-            <p className="text-[#aeaeae] text-[12px] font-mono leading-relaxed">
-              🔒 Voice commands are processed locally. Audio recordings are never saved or transmitted.
+          <div className="p-6 bg-[#0f111a] border border-[#2a2a2a] rounded-[8px] space-y-4">
+            <VoiceInput onTranscript={handleVoiceTranscript} value={voiceTranscript} onValueChange={setVoiceTranscript} />
+            {voiceTranscript && (
+              <div className="text-left bg-[#141414] border border-[#2a2a2a] rounded-[8px] p-3" aria-live="polite">
+                <p className="text-[11px] text-[#aeaeae] font-mono uppercase">Heard locally — not sent:</p>
+                <p className="text-[14px] text-white mt-1">“{voiceTranscript}”</p>
+                {voiceStatus && <p className="text-[11px] text-[#53adfe] mt-1" role="status">{voiceStatus}</p>}
+              </div>
+            )}
+            <p className="text-[#aeaeae] text-[11px] font-mono leading-relaxed text-center">
+              🔒 Voice commands are processed locally. Audio recordings are never saved or transmitted. Try “Transfer 5,000 to Sunita” — we fill amount & recipient.
             </p>
           </div>
         </div>
