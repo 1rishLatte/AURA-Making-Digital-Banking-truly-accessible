@@ -88,8 +88,8 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({ activeStep: prop
   }, [activeStep, activeProfile]);
 
   return (
-    <nav className="w-full bg-[#0f111a] border-b border-[#2a2a2a] sticky top-[56px] sm:top-[64px] z-30 shadow-md" aria-label="Dashboard Steps">
-      <div className="max-w-7xl mx-auto p-2 sm:p-3">
+    <nav className="w-full bg-[#0f111a] border-b border-[#2a2a2a] sticky top-[48px] sm:top-[56px] z-30 shadow-md -mt-1" aria-label="Dashboard Steps">
+      <div className="max-w-7xl mx-auto px-2 sm:px-3 py-2">
         <div role="tablist" className="flex md:grid md:grid-cols-5 gap-2 overflow-x-auto no-scrollbar scroll-smooth whitespace-nowrap items-center py-1">
           {STEPS.map((step) => {
             const isActive = activeStep === step.id;
