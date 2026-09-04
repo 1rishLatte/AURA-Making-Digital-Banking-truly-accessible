@@ -28,19 +28,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const router = useRouter();
   const pathname = usePathname();
 
-  // Restore session on initial load and route changes — with safety timeout for page 4 heavy load
+  // Restore session on initial load and route changes
   useEffect(() => {
-    let cancelled = false;
-    const safety = setTimeout(() => {
-      if (!cancelled) setIsLoading(false);
-    }, 900); // never stay stuck on "Verifying..." (page 4 heavy telemetry)
-
     const checkSession = () => {
       try {
         const storedSession = localStorage.getItem(AURA_SESSION_KEY);
         if (storedSession) {
           const parsedUser: UserSession = JSON.parse(storedSession);
+          
+          // Optional: Session expiry (e.g., valid for 24 hours)
           const isValid = Date.now() - parsedUser.loginTime < 24 * 60 * 60 * 1000;
+          
           if (isValid) {
             setIsAuthenticated(true);
             setUser(parsedUser);
@@ -50,6 +48,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setUser(null);
           }
         } else {
+          // Fallback to legacy cookie-based session for backward compat
           const hasCookie = document.cookie.includes('aura_session=demo');
           if (hasCookie) {
             const legacySession: UserSession = {
@@ -71,20 +70,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsAuthenticated(false);
         setUser(null);
       } finally {
-        if (!cancelled) {
-          clearTimeout(safety);
-          setIsLoading(false);
-        }
+        setIsLoading(false);
       }
     };
 
-    // Defer to next tick so heavy NoCaptchaSection (page 4) doesn't block main thread
-    const id = setTimeout(checkSession, 0);
-    return () => {
-      cancelled = true;
-      clearTimeout(safety);
-      clearTimeout(id);
-    };
+    checkSession();
   }, [pathname]);
 
   const login = (method: 'passkey' | 'demo' | 'trusted' = 'demo') => {

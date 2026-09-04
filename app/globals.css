@@ -433,22 +433,8 @@ html.theme-vision-aaa main {
   background: #ffffff !important;
   color: #000000 !important;
 }
-/* Vision: Fix page 4 blank — bg-ash-mist (light) must stay white even in dark+vision (dark was winning) */
-html.theme-vision-aaa .bg-ash-mist,
-html.theme-vision-aaa[data-theme="dark"] .bg-ash-mist,
-html.theme-vision-aaa .bg-bone,
-html.theme-vision-aaa[data-theme="dark"] .bg-bone {
-  background: #ffffff !important;
-  color: #000000 !important;
-}
-html.theme-vision-aaa .bg-ash-mist .text-vault-ink,
-html.theme-vision-aaa .bg-ash-mist .text-charcoal,
-html.theme-vision-aaa[data-theme="dark"] .bg-ash-mist .text-vault-ink {
-  color: #0a1418 !important;
-}
 /* Vision: Fix vault balance amount visibility — black on white, not black on dark (screenshot bug) */
-html.theme-vision-aaa main,
-html.theme-vision-aaa[data-theme="dark"] main {
+html.theme-vision-aaa main {
   background: #ffffff !important;
   color: #000000 !important;
 }
