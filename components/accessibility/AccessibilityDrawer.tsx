@@ -45,8 +45,9 @@ export const AccessibilityDrawer: React.FC = () => {
     <AnimatePresence>
       {isDrawerOpen && (
         <>
-          {/* Backdrop */}
+          {/* Backdrop — key mandatory for AnimatePresence exit */}
           <motion.div
+            key="backdrop"
             initial={reducedMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -55,8 +56,9 @@ export const AccessibilityDrawer: React.FC = () => {
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
           />
 
-          {/* Drawer Side Panel */}
+          {/* Drawer Side Panel — key mandatory */}
           <motion.aside
+            key="drawer"
             initial={reducedMotion ? false : { x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}

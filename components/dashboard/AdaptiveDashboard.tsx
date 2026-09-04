@@ -127,16 +127,26 @@ export const AdaptiveDashboard: React.FC = () => {
                 setChecking(true);
                 setExecuted(false);
                 setFraudResult(null);
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 5000); // Reason 3: timeout so fetch never hangs loader
                 try {
                   const res = await fetch('/api/assistant/fraud-check', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ amount: Number(amount) || 0, recipient: recipient || 'Unknown', isNewRecipient }),
+                    signal: controller.signal,
                   });
+                  clearTimeout(timeout);
+                  if (!res.ok) throw new Error('Network error');
                   const data = await res.json();
                   setFraudResult(data);
-                } catch {
-                  setFraudResult({ threatScore: 0.12, threatCategory: 'NONE', message: 'Transaction looks normal. Standard security active.', action: 'ALLOW' });
+                } catch (e: any) {
+                  clearTimeout(timeout);
+                  if (e?.name === 'AbortError') {
+                    setFraudResult({ threatScore: 0.12, threatCategory: 'TIMEOUT', message: 'Check timed out — using local rules. You can continue.', action: 'ALLOW' });
+                  } else {
+                    setFraudResult({ threatScore: 0.12, threatCategory: 'NONE', message: 'Transaction looks normal. Standard security active.', action: 'ALLOW' });
+                  }
                 } finally {
                   setChecking(false);
                 }

@@ -28,17 +28,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const router = useRouter();
   const pathname = usePathname();
 
-  // Restore session on initial load and route changes
+  // Restore session — GOOD: finally guarantees loader off, safety timeout prevents black screen if blocked
   useEffect(() => {
+    let cancelled = false;
+    const safety = setTimeout(() => {
+      if (!cancelled) setIsLoading(false);
+    }, 1200); // Reason 1: never leave isLoading true
+
     const checkSession = () => {
       try {
         const storedSession = localStorage.getItem(AURA_SESSION_KEY);
         if (storedSession) {
           const parsedUser: UserSession = JSON.parse(storedSession);
-          
-          // Optional: Session expiry (e.g., valid for 24 hours)
           const isValid = Date.now() - parsedUser.loginTime < 24 * 60 * 60 * 1000;
-          
           if (isValid) {
             setIsAuthenticated(true);
             setUser(parsedUser);
@@ -48,7 +50,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setUser(null);
           }
         } else {
-          // Fallback to legacy cookie-based session for backward compat
           const hasCookie = document.cookie.includes('aura_session=demo');
           if (hasCookie) {
             const legacySession: UserSession = {
@@ -70,11 +71,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsAuthenticated(false);
         setUser(null);
       } finally {
-        setIsLoading(false);
+        if (!cancelled) {
+          clearTimeout(safety);
+          setIsLoading(false); // GOOD: guaranteed
+        }
       }
     };
 
-    checkSession();
+    // Defer to next tick so heavy NoCaptchaSection (page 4) doesn't block
+    const id = setTimeout(checkSession, 0);
+    return () => {
+      cancelled = true;
+      clearTimeout(safety);
+      clearTimeout(id);
+    };
   }, [pathname]);
 
   const login = (method: 'passkey' | 'demo' | 'trusted' = 'demo') => {
