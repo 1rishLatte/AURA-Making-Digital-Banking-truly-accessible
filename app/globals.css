@@ -413,6 +413,26 @@ html.theme-vision-aaa .bg-white .text-\[\#0f111a\],
 html.theme-vision-aaa .bg-white.text-\[\#0f111a\] {
   color: #000000 !important;
 }
+/* Vision must win over dark theme — ensure white stays white even when data-theme=dark (selected nav + amount) */
+html.theme-vision-aaa .bg-\[\#ffffff\],
+html.theme-vision-aaa[data-theme="dark"] .bg-\[\#ffffff\],
+html.theme-vision-aaa .bg-white,
+html.theme-vision-aaa[data-theme="dark"] .bg-white {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+html.theme-vision-aaa .bg-\[\#000000\],
+html.theme-vision-aaa[data-theme="dark"] .bg-\[\#000000\] {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+html.theme-vision-aaa[data-theme="dark"] main,
+html.theme-vision-aaa main {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
 /* Vision: Fix vault balance amount visibility — black on white, not black on dark (screenshot bug) */
 html.theme-vision-aaa main {
   background: #ffffff !important;

@@ -35,7 +35,7 @@ export const AdaptiveDashboard: React.FC = () => {
   const isVision = activeProfile === 'vision';
 
   return (
-    <main className={`min-h-screen p-6 md:p-12 space-y-8 max-w-[1280px] mx-auto accelerate-gpu ${isVision ? 'bg-[#ffffff] text-[#000000]' : 'bg-[#0f111a] text-[#ffffff]'}`}>
+    <main className="min-h-screen p-6 md:p-12 space-y-8 max-w-[1280px] mx-auto accelerate-gpu bg-[#0f111a] text-[#ffffff]">
       {/* Active Profile Badge */}
       {activeProfile !== 'standard' && (
         <div className="flex items-center gap-2">
@@ -54,7 +54,7 @@ export const AdaptiveDashboard: React.FC = () => {
         <span className="text-[#aeaeae] text-[14px] font-mono uppercase tracking-[0.018em] block">
           ACCOUNT OVERVIEW
         </span>
-        <h1 className={`font-normal leading-[1.05] tracking-[-3.36px] overflow-visible py-1 ${isVision ? 'text-[#000000]' : 'text-[#ffffff]'} ${isSimple ? 'text-[36px] md:text-[56px]' : 'text-[48px] md:text-[84px]'}`}>
+        <h1 className={`font-normal leading-[1.05] tracking-[-3.36px] overflow-visible py-1 text-[#ffffff] ${isSimple ? 'text-[36px] md:text-[56px]' : 'text-[48px] md:text-[84px]'}`}>
           ₹1,24,500.00
         </h1>
         <p className="text-[#aeaeae] text-[16px] font-normal">
