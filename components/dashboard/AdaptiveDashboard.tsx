@@ -60,7 +60,7 @@ export const AdaptiveDashboard: React.FC = () => {
   const isVision = activeProfile === 'vision';
 
   return (
-    <main className="min-h-screen p-6 md:p-12 space-y-8 max-w-[1280px] mx-auto accelerate-gpu bg-[#0f111a] text-[#ffffff]">
+    <main id="main-content" tabIndex={-1} className="min-h-screen p-6 md:p-12 space-y-8 max-w-[1280px] mx-auto accelerate-gpu bg-[#0f111a] text-[#ffffff]">
       {/* Active Profile Badge */}
       {activeProfile !== 'standard' && (
         <div className="flex items-center gap-2">

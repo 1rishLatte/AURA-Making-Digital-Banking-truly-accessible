@@ -13,7 +13,7 @@ export default function HelpPage() {
       <div className="flex flex-col min-h-[100dvh]">
         <Header />
         <StepNavigation />
-        <div className="bg-white flex-1 py-8 md:py-12 px-6 md:px-10">
+        <main id="main-content" tabIndex={-1} className="bg-white flex-1 py-8 md:py-12 px-6 md:px-10">
       <div className="max-w-[1280px] mx-auto">
         <SectionHeader number="5" title="How we help" subtitle="One simple design works for many needs" id="help-header" />
         <div className="grid md:grid-cols-3 gap-6 mt-2">
@@ -30,7 +30,7 @@ export default function HelpPage() {
           <Link href="/" className="inline-flex items-center gap-2 rounded-full border border-silver-veil px-6 py-3 text-[14px] min-h-[44px]">Back to home ↑</Link>
         </div>
       </div>
-      </div>
+      </main>
         <HelpWidget />
         <footer className="bg-absolute text-white px-6 md:px-10 py-8 text-center text-[12px] text-silver-veil">© 2026 AURA • Single demo ID • WCAG 2.2 AA</footer>
       </div>

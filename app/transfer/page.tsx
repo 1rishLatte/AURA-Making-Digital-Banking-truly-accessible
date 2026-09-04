@@ -12,7 +12,7 @@ export default function TransferPage() {
       <div className="flex flex-col min-h-[100dvh]">
         <Header />
         <StepNavigation />
-        <div className="bg-white flex-1">
+        <main id="main-content" tabIndex={-1} className="bg-white flex-1">
         <div className="max-w-[1280px] mx-auto px-6 md:px-10 pt-8">
           <SectionHeader number="3" title="Try sending money" subtitle="We check every transfer — you stay in control" id="transfer-header" />
         </div>
@@ -20,7 +20,7 @@ export default function TransferPage() {
         <div className="max-w-[1280px] mx-auto px-6 md:px-10 pb-8 flex justify-center">
           <Link href="/no-puzzles" className="inline-flex items-center gap-2 rounded-full bg-vault-ink text-white px-6 py-3 text-[14px] font-medium min-h-[44px]">Next: No puzzles →</Link>
         </div>
-      </div>
+      </main>
         <HelpWidget />
         <footer className="bg-absolute text-white px-6 md:px-10 py-8 text-center text-[12px] text-silver-veil">© 2026 AURA • Single demo ID • WCAG 2.2 AA</footer>
       </div>

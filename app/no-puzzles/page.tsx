@@ -30,7 +30,7 @@ export default function NoPuzzlesPage() {
       <div className="flex flex-col min-h-[100dvh]">
         <Header />
         <StepNavigation />
-        <div className="bg-ash-mist flex-1">
+        <main id="main-content" tabIndex={-1} className="bg-ash-mist flex-1">
           <div className="max-w-[1280px] mx-auto px-6 md:px-10 pt-8">
             <SectionHeader number="4" title="No puzzles" subtitle="No hard reading, no hard tapping — we check in the background" id="no-puzzles-header" />
           </div>
@@ -46,7 +46,7 @@ export default function NoPuzzlesPage() {
             </Link>
             <p className="text-[12px] text-silver-veil">All checks are optional — use Step bar above to jump to any page.</p>
           </div>
-        </div>
+        </main>
         <HelpWidget />
         <footer className="bg-absolute text-white px-6 md:px-10 py-8 text-center text-[12px] text-silver-veil">© 2026 AURA • Single demo ID • WCAG 2.2 AA</footer>
       </div>
