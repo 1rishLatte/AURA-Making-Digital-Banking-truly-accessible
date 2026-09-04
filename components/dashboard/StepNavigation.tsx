@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useAccessibility } from '@/lib/adaptive-context';
 
 export interface StepItem {
@@ -32,8 +33,9 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({ activeStep: prop
   const pathname = usePathname();
   const router = useRouter();
   const activeTabRef = useRef<HTMLButtonElement | null>(null);
-  const { activeProfile } = useAccessibility();
+  const { activeProfile, reducedMotion } = useAccessibility();
   const isVision = activeProfile === 'vision';
+  const shouldReduceMotion = useReducedMotion() || reducedMotion;
 
   const hrefToId: Record<string, number> = {
     '/': 1,
@@ -102,14 +104,22 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({ activeStep: prop
                   e.preventDefault();
                   onSelectStep(step.id);
                 }}
-                className={`flex-none md:w-full flex items-center space-x-2 px-3 py-2 md:p-3 border transition-all text-left shrink-0 ${
+                className={`flex-none md:w-full flex items-center space-x-2 px-3 py-2 md:p-3 border transition-all text-left shrink-0 relative overflow-hidden ${
                   isVision
-                    ? `rounded-[8px] ${isActive ? 'bg-[#ffffff] text-[#000000] border-[#000000] border-2' : 'bg-[#000000] text-[#ffffff] border-[#ffffff]'}`
-                    : `rounded-[128px] md:rounded-[8px] ${isActive ? 'bg-[#141414] border-[#53adfe] text-[#ffffff]' : 'bg-[#0f111a] border-[#2a2a2a] text-[#aeaeae] hover:border-[#ffffff]'}`
+                    ? `rounded-[8px] ${isActive ? 'text-[#000000] border-[#000000] border-2' : 'bg-[#000000] text-[#ffffff] border-[#ffffff]'}`
+                    : `rounded-[128px] md:rounded-[8px] ${isActive ? 'text-[#ffffff] border-[#53adfe]' : 'bg-[#0f111a] text-[#aeaeae] border-[#2a2a2a] hover:border-[#ffffff]'}`
                 }`}
               >
+                {isActive && (
+                  <motion.div
+                    layoutId="active-pill"
+                    className={`absolute inset-0 -z-0 ${isVision ? 'bg-[#ffffff] rounded-[8px]' : 'bg-[#141414] rounded-[128px] md:rounded-[8px]'}`}
+                    transition={shouldReduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 380, damping: 30 }}
+                    aria-hidden
+                  />
+                )}
                 <span
-                  className={`w-5 h-5 md:w-6 md:h-6 flex items-center justify-center text-[11px] md:text-[12px] font-mono shrink-0 border-2 font-bold ${
+                  className={`relative z-10 w-5 h-5 md:w-6 md:h-6 flex items-center justify-center text-[11px] md:text-[12px] font-mono shrink-0 border-2 font-bold ${
                     isVision
                       ? isActive
                         ? 'rounded-[4px] bg-[#000000] text-[#ffffff] border-[#ffffff]'
@@ -120,7 +130,7 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({ activeStep: prop
                 >
                   {step.id}
                 </span>
-                <div className="truncate">
+                <div className="truncate relative z-10">
                   <span
                     className={`text-[13px] md:text-[14px] font-normal block truncate ${isVision ? (isActive ? 'text-[#000000]' : 'text-[#ffffff]') : ''}`}
                     style={isVision ? { color: isActive ? '#000000' : '#ffffff' } : undefined}

@@ -4,6 +4,7 @@ import "./globals.css";
 import { AccessibilityProvider } from "@/lib/adaptive-context";
 import { AccessibilityDrawer } from "@/components/accessibility/AccessibilityDrawer";
 import { AuthProvider } from "@/context/AuthContext";
+import { PageTransition } from "@/components/PageTransition";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap" });
@@ -38,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main-content" className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-vault-ink focus:text-white focus:rounded-[8px] focus:outline-none focus:ring-[3px] focus:ring-[#facc15] focus:ring-offset-2">Skip to main content</a>
         <AuthProvider>
           <AccessibilityProvider>
-            {children}
+            <PageTransition>{children}</PageTransition>
             <AccessibilityDrawer />
           </AccessibilityProvider>
         </AuthProvider>
