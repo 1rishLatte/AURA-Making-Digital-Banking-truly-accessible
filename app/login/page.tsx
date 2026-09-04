@@ -176,15 +176,18 @@ export default function LoginPage() {
             <div className="h-px bg-silver-veil/20 my-6" aria-hidden />
           )}
 
-          <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
+          <form method="POST" action="/api/login" onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
             <div className="flex flex-col gap-2">
-              <label htmlFor="aura-id" className="text-[14px] text-vault-ink font-medium">ID</label>
+              <label htmlFor="aura-id" className="text-[14px] text-vault-ink font-medium">AURA ID</label>
               <input
                 id="aura-id"
+                name="id"
+                type="text"
                 value={id}
                 onChange={e => setId(e.target.value)}
                 placeholder="AURA-DEMO-001"
                 autoComplete="username"
+                required
                 autoFocus
                 className="min-h-[56px] rounded-[8px] border border-silver-veil bg-white px-4 text-[16px] focus:outline-none focus:ring-2 focus:ring-frost"
                 aria-describedby={err ? "login-error" : undefined}
@@ -192,19 +195,24 @@ export default function LoginPage() {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label htmlFor="aura-pass" className="text-[14px] text-vault-ink font-medium">Code</label>
+              <label htmlFor="aura-pass" className="text-[14px] text-vault-ink font-medium">Passcode</label>
               <input
                 id="aura-pass"
+                name="password"
                 type="password"
                 value={pass}
                 onChange={e => setPass(e.target.value)}
                 placeholder="••••••••"
                 autoComplete="current-password"
+                required
                 className="min-h-[56px] rounded-[8px] border border-silver-veil bg-white px-4 text-[16px] focus:outline-none focus:ring-2 focus:ring-frost"
                 aria-describedby={err ? "login-error" : undefined}
                 aria-invalid={!!err}
               />
             </div>
+            <noscript>
+              <p className="text-[13px] text-amber-800 bg-amber-50 border border-amber-200 rounded-[8px] px-4 py-3">JavaScript is off — you can still sign in: type your ID and code above and press Enter. Copy buttons need JS, but typing works.</p>
+            </noscript>
             {err && <p id="login-error" role="alert" className="text-[14px] text-red-700 bg-red-50 border border-red-200 rounded-[8px] px-4 py-3">{err}</p>}
             <button type="submit" disabled={loading} className="min-h-[56px] rounded-[8px] bg-vault-ink text-white text-[16px] font-medium disabled:opacity-50">
               {loading ? "Checking…" : "Enter"}
