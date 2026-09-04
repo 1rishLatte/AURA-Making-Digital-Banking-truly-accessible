@@ -127,47 +127,54 @@ export default function LoginPage() {
           <h1 className="text-[40px] leading-[1.06] tracking-[-1.2px] text-vault-ink mt-2" style={{ fontFamily: "var(--font-manrope), system-ui" }}>Welcome</h1>
           <p className="text-[16px] text-charcoal mt-2">Use the test ID below. No puzzle. No hard check.</p>
 
-          <div className="mt-6 rounded-[8px] bg-vault-ink text-white p-4 border border-white/10">
-            <p className="text-[12px] uppercase tracking-[0.08em] text-frost" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>Test ID for demo</p>
-            <div className="mt-2 flex items-center justify-between gap-2">
-              <p className="text-[16px]">ID: <code className="px-1.5 py-0.5 rounded bg-white/10">AURA-DEMO-001</code></p>
-              <button type="button" onClick={() => copyText('AURA-DEMO-001', 'id')} aria-label="Copy test ID" className="min-h-[44px] min-w-[44px] px-3 rounded-[8px] bg-white/10 hover:bg-white/20 border border-white/20 text-[12px] font-mono shrink-0">
+          <div className="mt-6 rounded-[12px] bg-vault-ink text-white p-5 border border-white/10">
+            <p className="text-[12px] uppercase tracking-[0.08em] text-frost" style={{ fontFamily: "var(--font-jetbrains), monospace" }}>Test ID for demo — 1-click, no typing</p>
+            <div className="mt-3 flex items-center justify-between gap-3">
+              <p className="text-[16px] font-mono">ID: <code className="px-2 py-1 rounded bg-white text-[#0f111a] font-bold">AURA-DEMO-001</code></p>
+              <button type="button" onClick={() => copyText('AURA-DEMO-001', 'id')} aria-label="Copy test ID AURA-DEMO-001 to clipboard" className="min-h-[44px] min-w-[88px] px-4 rounded-[8px] bg-white text-[#0f111a] hover:bg-ash-mist border border-white text-[13px] font-medium shrink-0 focus:outline-none focus-visible:ring-[3px] focus-visible:ring-[#facc15]">
                 {copied === 'id' ? 'Copied ✓' : 'Copy'}
               </button>
             </div>
-            <div className="mt-2 flex items-center justify-between gap-2">
-              <p className="text-[14px]">Code: <code className="px-1.5 py-0.5 rounded bg-white/10">AURA2026</code></p>
-              <button type="button" onClick={() => copyText('AURA2026', 'code')} aria-label="Copy test code" className="min-h-[44px] min-w-[44px] px-3 rounded-[8px] bg-white/10 hover:bg-white/20 border border-white/20 text-[12px] font-mono shrink-0">
+            <div className="mt-3 flex items-center justify-between gap-3">
+              <p className="text-[16px] font-mono">Code: <code className="px-2 py-1 rounded bg-white text-[#0f111a] font-bold">AURA2026</code></p>
+              <button type="button" onClick={() => copyText('AURA2026', 'code')} aria-label="Copy test code AURA2026 to clipboard" className="min-h-[44px] min-w-[88px] px-4 rounded-[8px] bg-white text-[#0f111a] hover:bg-ash-mist border border-white text-[13px] font-medium shrink-0 focus:outline-none focus-visible:ring-[3px] focus-visible:ring-[#facc15]">
                 {copied === 'code' ? 'Copied ✓' : 'Copy'}
               </button>
             </div>
-            <button type="button" onClick={autoFill} aria-label="Auto-fill demo credentials" className="mt-3 w-full min-h-[44px] rounded-[8px] bg-white text-vault-ink text-[14px] font-medium hover:bg-ash-mist border border-white/20">
-              Click to Auto-Fill →
+            <button type="button" onClick={autoFill} aria-label="Auto-fill demo ID and code into form" className="mt-4 w-full min-h-[44px] rounded-[8px] bg-[#00D492] hover:bg-[#00b87a] text-[#0a1418] text-[14px] font-bold border border-[#00D492] focus:outline-none focus-visible:ring-[3px] focus-visible:ring-[#facc15]">
+              Auto-fill Demo Credentials →
             </button>
-            <p className="text-[11px] text-frost mt-2">No typing needed — for tremors or screen readers.</p>
+            <p className="text-[12px] text-white mt-2 font-medium" aria-live="polite">{copied ? `✓ ${copied === 'id' ? 'ID' : copied === 'code' ? 'Code' : ''} copied — press Auto-fill to place it` : 'No typing needed — for tremors or screen readers. One tap copies, one tap fills.'}</p>
           </div>
 
-          {/* Passkeys — biometric, no typing, phishing-proof (audit solution) */}
-          <div className="mt-6">
-            <button
-              type="button"
-              onClick={handlePasskey}
-              disabled={passkeyLoading || loading}
-              className="w-full min-h-[56px] rounded-[8px] bg-[#1c53bd] hover:bg-[#1a4aa8] text-white text-[16px] font-medium flex items-center justify-center gap-3 disabled:opacity-50 border border-[#53adfe]/30"
-              aria-label="Sign in with passkey using Face ID or fingerprint"
-            >
-              <span aria-hidden className="text-[20px]">🔐</span>
-              {passkeyLoading ? 'Checking biometrics…' : passkeySupported ? 'Sign in with Face ID / Fingerprint (Passkey)' : 'Passkey — check device support'}
-            </button>
-            <p className="text-[12px] text-silver-veil mt-2 text-center">No password to remember. No puzzle. Uses your device&apos;s Face ID, Touch ID, or PIN. Phishing-proof.</p>
-            {!passkeySupported && <p className="text-[11px] text-amber-700 mt-1 text-center">This device doesn&apos;t support passkeys — use ID and code below.</p>}
-          </div>
+          {/* Passkey — primary when supported, gracefully hidden when not */}
+          {passkeySupported ? (
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={handlePasskey}
+                disabled={passkeyLoading || loading}
+                className="w-full min-h-[56px] rounded-[12px] bg-[#1c53bd] hover:bg-[#1a4aa8] text-white text-[16px] font-medium flex items-center justify-center gap-3 disabled:opacity-50 border border-[#53adfe]/30 focus:outline-none focus-visible:ring-[3px] focus-visible:ring-[#facc15]"
+                aria-label="Log in with Device Passkey using Face ID, Touch ID, or PIN"
+              >
+                <span aria-hidden className="text-[20px]">🔐</span>
+                {passkeyLoading ? 'Checking biometrics…' : 'Log in with Device Passkey (Face ID / Touch ID / PIN)'}
+              </button>
+              <p className="text-[12px] text-silver-veil mt-2 text-center">No password to remember. Uses your device&apos;s Face ID, Touch ID, or PIN. Private and phishing-proof.</p>
+            </div>
+          ) : (
+            <p className="text-[13px] text-charcoal mt-6 text-center bg-ash-mist border border-silver-veil/20 rounded-[8px] px-4 py-3">Your device doesn&apos;t support passkeys — continue with demo ID and code below.</p>
+          )}
 
-          <div className="flex items-center gap-3 my-2" aria-hidden>
-            <div className="flex-1 h-px bg-silver-veil/30" />
-            <span className="text-[11px] uppercase tracking-[0.08em] text-silver-veil font-mono">or use ID and code</span>
-            <div className="flex-1 h-px bg-silver-veil/30" />
-          </div>
+          {passkeySupported ? (
+            <div className="flex items-center gap-3 my-6" aria-hidden>
+              <div className="flex-1 h-px bg-silver-veil/30" />
+              <span className="text-[11px] uppercase tracking-[0.08em] text-silver-veil font-mono">or use demo code</span>
+              <div className="flex-1 h-px bg-silver-veil/30" />
+            </div>
+          ) : (
+            <div className="h-px bg-silver-veil/20 my-6" aria-hidden />
+          )}
 
           <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
             <div className="flex flex-col gap-2">
@@ -206,7 +213,7 @@ export default function LoginPage() {
           </form>
         </div>
       </main>
-      <footer className="bg-absolute text-white px-6 md:px-10 py-6 text-center text-[12px] text-silver-veil">© 2026 AURA • Single demo ID • WCAG 2.2 AA • We may briefly pause risky transfers to keep you safe — you can review and continue.</footer>
+      <footer className="bg-absolute text-white px-6 md:px-10 py-6 text-center text-[12px] text-silver-veil">© 2026 AURA • Secure vault • WCAG 2.2 AA • India • No puzzles, no timers.</footer>
     </div>
   );
 }
