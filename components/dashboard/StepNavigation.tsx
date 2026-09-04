@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useAccessibility } from '@/lib/adaptive-context';
@@ -32,7 +33,7 @@ interface StepNavigationProps {
 export const StepNavigation: React.FC<StepNavigationProps> = ({ activeStep: propActive, onSelectStep: propOnSelect }) => {
   const pathname = usePathname();
   const router = useRouter();
-  const activeTabRef = useRef<HTMLButtonElement | null>(null);
+  const activeTabRef = useRef<HTMLAnchorElement | null>(null);
   const { activeProfile, reducedMotion } = useAccessibility();
   const isVision = activeProfile === 'vision';
   const shouldReduceMotion = useReducedMotion() || reducedMotion;
@@ -93,18 +94,31 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({ activeStep: prop
           {STEPS.map((step) => {
             const isActive = activeStep === step.id;
             return (
-              <button
+              <Link
                 key={step.id}
-                ref={isActive ? activeTabRef : null}
-                type="button"
+                href={DASHBOARD_STEPS.find((s) => s.id === step.id)!.href}
+                ref={isActive ? (activeTabRef as any) : null}
                 role="tab"
                 aria-selected={isActive}
                 aria-current={isActive ? 'step' : undefined}
+                prefetch
                 onClick={(e) => {
-                  e.preventDefault();
-                  onSelectStep(step.id);
+                  if (propOnSelect) {
+                    e.preventDefault();
+                    onSelectStep(step.id);
+                    return;
+                  }
+                  // Fallback: ensure navigation even if Link is intercepted — log and hard fallback
+                  console.log("StepNavigation Link click", step.id, "->", DASHBOARD_STEPS.find((s) => s.id === step.id)!.href);
+                  // Let Next.js Link handle primary navigation; fallback after 300ms if still on same page
+                  const href = DASHBOARD_STEPS.find((s) => s.id === step.id)!.href;
+                  setTimeout(() => {
+                    if (window.location.pathname !== href) {
+                      window.location.href = href;
+                    }
+                  }, 300);
                 }}
-                className={`flex-none md:w-full flex items-center space-x-2 px-3 py-2 md:p-3 border transition-all text-left shrink-0 relative overflow-hidden ${
+                className={`flex-none md:w-full flex items-center space-x-2 px-3 py-2 md:p-3 border transition-all text-left shrink-0 relative overflow-hidden no-underline ${
                   isVision
                     ? `rounded-[8px] ${isActive ? 'text-[#000000] border-[#000000] border-2' : 'bg-[#000000] text-[#ffffff] border-[#ffffff]'}`
                     : `rounded-[128px] md:rounded-[8px] ${isActive ? 'text-[#ffffff] border-[#53adfe]' : 'bg-[#0f111a] text-[#aeaeae] border-[#2a2a2a] hover:border-[#ffffff]'}`
@@ -144,7 +158,7 @@ export const StepNavigation: React.FC<StepNavigationProps> = ({ activeStep: prop
                     {step.description}
                   </p>
                 </div>
-              </button>
+              </Link>
             );
           })}
         </div>
