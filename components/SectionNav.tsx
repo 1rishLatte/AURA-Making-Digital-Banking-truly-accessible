@@ -39,11 +39,11 @@ export function SectionNav() {
 
 export function SectionHeader({ number, title, subtitle, id }: { number: string; title: string; subtitle?: string; id: string }) {
   return (
-    <div id={id} className="flex items-start gap-5 mb-8 scroll-mt-[96px] pt-1">
-      <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-vault-ink text-white text-[14px] font-semibold shrink-0 mt-1">{number}</span>
-      <div className="min-w-0 overflow-visible flex-1">
-        <h2 className="text-[24px] md:text-[32px] leading-[1.3] tracking-[-0.5px] font-medium text-vault-ink overflow-visible pb-1" style={{ fontFamily: "var(--font-manrope), system-ui" }}>{title}</h2>
-        {subtitle && <p className="text-[13px] md:text-[14px] text-silver-veil mt-2 leading-[1.5]">{subtitle}</p>}
+    <div id={id} className="flex items-center gap-4 mb-6 scroll-mt-[96px]">
+      <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-vault-ink text-white text-[14px] font-semibold shrink-0">{number}</span>
+      <div className="min-w-0 overflow-visible">
+        <h2 className="text-[24px] md:text-[32px] leading-[1.25] tracking-[-0.5px] font-medium text-vault-ink overflow-visible" style={{ fontFamily: "var(--font-manrope), system-ui" }}>{title}</h2>
+        {subtitle && <p className="text-[13px] text-silver-veil mt-1 leading-[1.4]">{subtitle}</p>}
       </div>
     </div>
   );
